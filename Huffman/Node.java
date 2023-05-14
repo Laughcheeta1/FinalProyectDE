@@ -1,45 +1,55 @@
 package Huffman;
 
-public class Node {
-    private Node parent;
-    private Node left;
-    private Node right;
+/**
+ * Santiago Yepes Mesa
+ * Code highly based from the video: "Huffman Coding Algorithm Explained and Implemented in Java | Data Compression | Geekific" by Geekific
+ */
 
-    public Node(Node parent)
+public class Node implements Comparable<Node> {
+    private final int frequency;
+    private final Node leftNode;
+    private final Node rightNode;
+
+
+    /**
+     * Constructor
+     * @param leftNode
+     * @param rightNode
+     */
+    public Node(Node leftNode, Node rightNode)
     {
-        this.parent = parent;
-        left = null;
-        right = null;
+        this.frequency = leftNode.getFrequency() + rightNode.getFrequency();
+        this.leftNode = leftNode;
+        this.rightNode = rightNode;
     }
 
-    public Node()
+    /**
+     * @return Node to the left
+     */
+    public Node getLeftNode() { return leftNode; }
+
+
+    /**
+     * @return Node to the right
+     */
+    public Node getRightNode() { return rightNode; }
+
+    /**
+     * @return The frequency that the node is representing
+     */
+    public int getFrequency() { return frequency; }
+
+    /**
+     * Returns the comparison between the node and a node you give, based on the frequencies of each node,
+     * returns 0 if the nodes have the same frequencies, else it will return the difference between the two numbers;
+     * if this node has a higher frequency, the difference is going to be positive, if the given node has a higher
+     * frequency then the difference is going to be negative.
+     * @param node the object to be compared.
+     * @return result of the comparison
+     */
+    @Override
+    public int compareTo(Node node)
     {
-        parent = null;
-        left = null;
-        right = null;
-    }
-
-    public Node getLeft() {
-        return left;
-    }
-
-    public Node getRight() {
-        return right;
-    }
-
-    public Node getParent() {
-        return parent;
-    }
-
-    public void setLeft(Node left) {
-        this.left = left;
-    }
-
-    public void setRight(Node right) {
-        this.right = right;
-    }
-
-    public void setParent(Node parent) {
-        this.parent = parent;
+        return this.frequency - node.getFrequency();
     }
 }
