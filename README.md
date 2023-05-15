@@ -2,6 +2,7 @@
 The repository for the final project of Data Structures class
 
 Team: 
+
 Team Leader: Santiago Yepes Mesa
 
 This final project consist of using the Huffman algorith to compress .txt files, using Java.
