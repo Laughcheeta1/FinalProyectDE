@@ -1,8 +1,8 @@
 package Huffman;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.*;
 import java.util.HashMap;
-
-import java.io.File;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Monuñoz, Santiago Augusto Toro Bonilla
@@ -16,7 +16,7 @@ public class Huffman {
      */
     public CompressedFile compressTxt(File file)
     {
-
+        return null;
     }
 
     /**
@@ -26,7 +26,7 @@ public class Huffman {
      */
     public File decompressFile(CompressedFile compressedFile)
     {
-
+        return null;
     }
 
     /**
@@ -35,8 +35,28 @@ public class Huffman {
      * @param file to count the number of characters
      * @return HashMap that contains the number of chars
      */
-    private HashMap<Character, Integer> countCharacters(File file)
+    private HashMap<Character, Integer> countCharacters(File file) throws FileNotFoundException, FileExtensionException, IOException
     {
+        if (!file.getName().endsWith(".txt") || file.getName().isBlank())
+        {
+            throw new FileExtensionException();
+        }
 
+        HashMap<Character, Integer> count = new HashMap<>();
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        // UsingFile Reader instead of BufferedReader since it only needs to check for une character at a time
+
+        int character;
+        while ((character = br.read()) != -1)
+        {
+            if (count.containsKey((char) character))
+                count.replace((char) character, count.get((char) character) + 1);
+
+            else
+                count.put((char) character, 1);
+        }
+
+        return count;
     }
 }
