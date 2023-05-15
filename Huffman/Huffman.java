@@ -45,7 +45,6 @@ public class Huffman {
         HashMap<Character, Integer> count = new HashMap<>();
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
-        // UsingFile Reader instead of BufferedReader since it only needs to check for une character at a time
 
         int character;
         while ((character = br.read()) != -1)
