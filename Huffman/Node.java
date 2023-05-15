@@ -1,7 +1,8 @@
 package Huffman;
 
+
 /**
- * Santiago Yepes Mesa
+ * Santiago Yepes Mesa.
  * Code highly based from the video: "Huffman Coding Algorithm Explained and Implemented in Java | Data Compression | Geekific" by Geekific
  */
 
@@ -21,6 +22,17 @@ public class Node implements Comparable<Node> {
         this.frequency = leftNode.getFrequency() + rightNode.getFrequency();
         this.leftNode = leftNode;
         this.rightNode = rightNode;
+    }
+
+    /**
+     * Second constructor, in case that the Node being created is a leaf Node
+     * @param frequency
+     */
+    public Node(int frequency)
+    {
+        this.frequency = frequency;
+        this.leftNode = null;
+        this.rightNode = null;
     }
 
     /**

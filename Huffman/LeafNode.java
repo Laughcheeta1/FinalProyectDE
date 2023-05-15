@@ -1,18 +1,28 @@
 package Huffman;
 
+/**
+ * Santiago Yepes Mesa.
+ * Code highly based from the video: "Huffman Coding Algorithm Explained and Implemented in Java | Data Compression | Geekific" by Geekific
+ */
+
 public class LeafNode extends Node{
-    private char value;
+    private final char value;
 
-    public LeafNode(Node parent)
+    /**
+     * Constructor for the leadNode.
+     * @param value
+     * @param frequency
+     */
+    public LeafNode(char value, int frequency)
     {
-        super(parent);
+        super(frequency);
+        this.value = value;
     }
 
-    public LeafNode()
-    {
-        super();
-    }
-
+    /**
+     * returns the char value of the leaf
+     * @return value of leaf
+     */
     public char getValue() {
         return value;
     }
