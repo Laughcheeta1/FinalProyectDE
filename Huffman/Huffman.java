@@ -15,6 +15,7 @@ public class Huffman {
      */
     public CompressedFile compressTxt(File file)
     {
+        // Aqui empiezo a programar
         return new CompressedFile(null, null);
     }
 
