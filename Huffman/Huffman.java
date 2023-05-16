@@ -1,6 +1,5 @@
 package Huffman;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.HashMap;
 
@@ -16,12 +15,12 @@ public class Huffman {
      */
     public CompressedFile compressTxt(File file)
     {
-        return null;
+        return new CompressedFile(null, null);
     }
 
     /**
      * Given a compressed file, of the extension .compr, returns the .txt uncompressed version of this file
-     * @param compressedFile
+     * @param compressedFile with the .compr extension
      * @return .txt File
      */
     public File decompressFile(CompressedFile compressedFile)
@@ -35,7 +34,7 @@ public class Huffman {
      * @param file to count the number of characters
      * @return HashMap that contains the number of chars
      */
-    private HashMap<Character, Integer> countCharacters(File file) throws FileNotFoundException, FileExtensionException, IOException
+    private HashMap<Character, Integer> countCharacters(File file) throws FileExtensionException, IOException
     {
         if (!file.getName().endsWith(".txt") || file.getName().isBlank())
         {

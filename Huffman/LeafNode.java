@@ -12,8 +12,8 @@ public class LeafNode extends Node implements Serializable {
 
     /**
      * Constructor for the leadNode.
-     * @param value
-     * @param frequency
+     * @param value char that the node represents
+     * @param frequency that the node represents
      */
     public LeafNode(char value, int frequency)
     {

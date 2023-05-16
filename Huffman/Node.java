@@ -28,7 +28,7 @@ public class Node implements Comparable<Node>, Serializable {
 
     /**
      * Second constructor, in case that the Node being created is a leaf Node
-     * @param frequency
+     * @param frequency that the node represents
      */
     public Node(int frequency)
     {

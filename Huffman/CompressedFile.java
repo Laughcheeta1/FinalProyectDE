@@ -6,17 +6,5 @@ import java.util.BitSet;
 /**
  * Santiago Yepes Mesa
  */
-public class CompressedFile implements Serializable {
-    private Node treeHead;
-    private BitSet encoding;
-
-    public Node getTreeHead()
-    {
-        return treeHead;
-    }
-
-    public BitSet getEncoding()
-    {
-        return encoding;
-    }
+public record CompressedFile(Node treeHead, BitSet encoding) implements Serializable {
 }
