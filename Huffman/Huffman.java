@@ -26,6 +26,7 @@ public class Huffman {
      */
     public File decompressFile(CompressedFile compressedFile)
     {
+
         return null;
     }
 
@@ -57,5 +58,16 @@ public class Huffman {
         }
 
         return count;
+    }
+
+
+    /**
+     * Given a HashMap that stores the frequencies returns the Tree head of the Huffman tree
+     * @param frequencies of the characters
+     * @return Head node of the tree
+     */
+    private Node createHuffmanTree(HashMap<Character, Integer> frequencies)
+    {
+        return null;
     }
 }
