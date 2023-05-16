@@ -1,7 +1,7 @@
 # FinalProyectDE
 The repository for the final project of Data Structures class
 
-Team: 
+Team: Mateo Avalos Estrada, Simon Giraldo Castro, Tomas Lopera Duque, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla, Susana Uribe Velasquez and Santiago Yepes Mesa
 
 Team Leader: Santiago Yepes Mesa
 
