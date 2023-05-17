@@ -19,7 +19,7 @@ public class Huffman {
     public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
         Node treeHead = createHuffmanTree(countCharacters(file));
-        return new CompressedFile(null, null);
+        return new CompressedFile(treeHead, null);
     }
 
     /**
@@ -41,16 +41,20 @@ public class Huffman {
      */
     private HashMap<Character, Integer> countCharacters(File file) throws FileExtensionException, IOException
     {
+        // Check that the file is of the correct type
         if (!file.getName().endsWith(".txt") || file.getName().isBlank())
         {
             throw new FileExtensionException();
         }
 
+        // Create the needed resources
         HashMap<Character, Integer> count = new HashMap<>();
         FileReader fr = new FileReader(file);
+        // Buffered reader is faster than file reader, that's why we use it
         BufferedReader br = new BufferedReader(fr);
 
-        int character;
+        // Count the times each character appears, and save it into the HashMap
+        int character; // Is of type int because BufferedReader only allows to read the int value of the char
         while ((character = br.read()) != -1)
         {
             if (count.containsKey((char) character))
