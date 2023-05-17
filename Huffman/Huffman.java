@@ -8,7 +8,6 @@ import java.util.PriorityQueue;
  * Santiago Yepes Mesa, Simon Eduardo Parisca Monuñoz, Santiago Augusto Toro Bonilla
  */
 
-//Santiago Augsuto Toro
 public class Huffman {
     /**
      * Given a .txt file, returns the compressed version of this file in the way of a CompressedFile class object.
