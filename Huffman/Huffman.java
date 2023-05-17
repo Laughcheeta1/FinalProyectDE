@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 /**
- * Santiago Yepes Mesa, Simon Eduardo Parisca Monuñoz, Santiago Augusto Toro Bonilla
+ * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
  */
 
 public class Huffman {
