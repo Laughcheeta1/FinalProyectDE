@@ -1,7 +1,10 @@
 package Huffman;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Monuñoz, Santiago Augusto Toro Bonilla
@@ -13,9 +16,9 @@ public class Huffman {
      * @param file to compress
      * @return CompressedFile object.
      */
-    public CompressedFile compressTxt(File file)
+    public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
-        // Aqui empiezo a programar
+        Node treeHead = createHuffmanTree(countCharacters(file));
         return new CompressedFile(null, null);
     }
 
@@ -68,6 +71,22 @@ public class Huffman {
      */
     private Node createHuffmanTree(HashMap<Character, Integer> frequencies)
     {
-        return null;
+        // Creates a priority queue that will always have first the nodes that stores the lower values (because of the
+            // compare to of the class Node)
+        PriorityQueue<Node> list = new PriorityQueue<>();
+        // Create all the base nodes of the tree
+        for (Character c : frequencies.keySet())
+        {
+            list.add(new LeafNode(c, frequencies.get(c)));
+        }
+
+        // As the huffman code says, make a new node with the two lowest value nodes
+        while (list.size() > 1)
+        {
+            list.add(new Node(list.poll(), list.poll()));
+        }
+
+        // The last remaining element of the queue is the  of the created tree
+        return list.poll();
     }
 }
