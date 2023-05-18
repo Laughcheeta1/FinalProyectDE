@@ -24,7 +24,8 @@ public class Huffman {
         int actual = 0;
         for (Character key: frequencies.keySet()) {
             BitSet c = generateCode(treeHead, key);
-            for (int i = 0; i < c.size(); i++)
+            int x = c.size();
+            for (int i = 0; i < x; i++)
                 encode.set(actual++, c.get(i));
         }
         return new CompressedFile(treeHead, encode);
@@ -66,42 +67,6 @@ public class Huffman {
     public File decompressFile(CompressedFile compressedFile)
     {
         byte[] buffer = new byte[1024];
-
-        try {
-            File carpetaDestino = new File(directorioDestino);
-            if (!carpetaDestino.exists()) {
-                carpetaDestino.mkdir();
-            }
-
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoComprimido));
-            ZipEntry entrada;
-
-            while ((entrada = zis.getNextEntry()) != null) {
-                String nombreArchivo = entrada.getName();
-                if (!entrada.isDirectory() && nombreArchivo.endsWith(".compr")) {
-                    String archivoDescomprimido = directorioDestino + File.separator + obtenerNombreSinExtension(nombreArchivo) + ".txt";
-                    File nuevoArchivo = new File(archivoDescomprimido);
-
-                    // Crear directorios si es necesario
-                    nuevoArchivo.getParentFile().mkdirs();
-
-                    // Extraer el archivo
-                    FileOutputStream fos = new FileOutputStream(nuevoArchivo);
-                    int longitud;
-                    while ((longitud = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, longitud);
-                    }
-                    fos.close();
-                }
-                zis.closeEntry();
-            }
-
-            zis.close();
-
-            System.out.println("¡Archivo descomprimido exitosamente!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         
         return null;
     }
