@@ -154,7 +154,7 @@ public class Huffman {
         // Create all the base nodes of the tree
         for (Character c : frequencies.keySet())
         {
-            list.add(new LeafNode(c, frequencies.get(c)));
+            list.add(new Node(frequencies.get(c), c.toString()));
         }
 
         // As the huffman code says, make a new node with the two lowest value nodes
