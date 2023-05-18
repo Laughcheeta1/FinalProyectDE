@@ -19,7 +19,43 @@ public class Huffman {
     public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
         Node treeHead = createHuffmanTree(countCharacters(file));
-        return new CompressedFile(treeHead, null);
+        HashMap<Character, Integer> frequencies = countCharacters(file);
+        BitSet encode = new BitSet();
+        int actual = 0;
+        for (Character key: frequencies.keySet()) {
+            BitSet c = generateCode(treeHead, key);
+            for (int i = 0; i < c.size(); i++)
+                encode.set(actual++, c.get(i));
+        }
+        return new CompressedFile(treeHead, encode);
+    }
+
+
+    /**
+     * Recursive method that given a Huffman tree and the node to search returns the character
+     * binary code.
+     * @param head
+     * @return
+     */
+    private BitSet generateCode(Node head, Character key){
+        BitSet code = new BitSet();
+        return generateCode(head, key, code, 0);
+    }
+    private BitSet generateCode(Node head, Character key, BitSet code, int actual){
+        Node rs = head.getRightNode();
+        Node ls = head.getLeftNode();
+        if (rs == null && ls == null) {
+            return code;
+        }
+        if (ls != null && ls.getKey().contains(String.valueOf(key))) {
+            code.set(actual, false);
+            return generateCode(ls, key, code, actual + 1);
+        }
+        else {
+            code.set(actual, true);
+            return generateCode(rs, key, code, actual + 1);
+        }
+
     }
 
     /**
@@ -92,31 +128,6 @@ public class Huffman {
 
         // The last remaining element of the queue is the head of the created tree
         return list.poll();
-    }
-
-    /**
-     * Recursive method that given a Huffman tree and the hashmap returns the entire compressed
-     * binary code of the file.
-     * @param head
-     * @return
-     */
-    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies){
-        BitSet code = new BitSet();
-        return generateCode(head, node, frequencies, code, 0);
-    }
-    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies, BitSet code, int actual){
-        Node rs = head.getRightNode();
-        Node ls = head.getLeftNode();
-        if (rs == null && ls == null)
-            return code;
-        if (ls != null) {
-            code.set(actual, false);
-            return generateCode(rs, node, frequencies, code, actual + 1);
-        }
-        else {
-            code.set(actual, true);
-            return generateCode(ls, node, frequencies, code, actual + 1);
-        }
     }
 
     public static void descomprimirArchivo(String archivoComprimido, String directorioDestino) {
