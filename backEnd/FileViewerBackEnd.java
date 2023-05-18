@@ -1,42 +1,62 @@
 package backEnd;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Creator: 
  * This class is the back end of the TextViewer program.
  */
 
 public class FileViewerBackEnd {
-    // Retorna la ruta de la carpeta de descargas · Susana Uribe
+	/**
+	 * Returns the path of the download folder
+	 * @return path of the download folder
+	 */
     public static Path downloadsPath() {
-		Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
-		return downloadsPath;
+		return Paths.get(System.getProperty("user.home"), "Downloads");
 	}
 
-    // Verifica si la ruta existe · Susana Uribe
-    public static void checkPath(String path) {
+	/**
+	 * checks if a file exists for the given path
+	 * @param path of the file
+	 * @return if the file exists or not
+	 */
+    public static boolean checkPath(String path) {
 		File file = new File(path);
-	    if (file.exists()) {
-	        return true;
-	    } else {
-	        return false;
-        }
+		return file.exists();
 	}
 
-    // Retorna el contenido del archivo como String · Susana Uribe
+	/**
+	 * Given the location of a file, returns the contents of the file as a String
+	 * @param archivo, location of the file
+	 * @return File Content
+	 * @throws IOException
+	 */
     public static String readFile(String archivo) throws IOException {
-		File file=new File(archivo);
-		FileReader fr= new FileReader(file);
-		BufferedReader b= new BufferedReader(fr);
+		File file = new File(archivo);
+		FileReader fr = new FileReader(file);
+		BufferedReader b = new BufferedReader(fr);
 		String linea;
 		String lectura = "";
-		while ((linea=b.readLine())!=null) {
-			lectura=lectura+linea+"\n";
+		while ((linea = b.readLine()) != null) {
+			lectura = lectura + linea + "\n";
 		}
 		b.close();
 		fr.close();
 		return lectura;
 	}
-    // Guarda el archivo · Susana Uribe
-    public static void save() {
+
+	/**
+	 * Saves the archive
+	 * @throws IOException
+	 */
+    public static void save() throws IOException {
         File file = new File(downloadsPath().toString()); //Se crea el archivo en Descargas
         //método para leer archivo
 		Desktop.getDesktop().open(file); //Se abre el archivo
