@@ -19,33 +19,39 @@ public class Huffman {
     public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
         Node treeHead = createHuffmanTree(countCharacters(file));
-        HashMap<Character, Integer> frequencies = countCharacters(file);
-        BitSet encode = new BitSet();
+        BitSet encoding = getEncodedText(treeHead, file);
 
-
-        return new CompressedFile(treeHead, encode);
+        return new CompressedFile(treeHead, encoding);
     }
 
-    public BitSet getEncodedText(Node treeHead){
+    public BitSet getEncodedText(Node treeHead, File file) throws IOException {
+        ArrayList<Boolean> code = new ArrayList<>(); // Stores an array of booleans that later will become bits
+        HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead); // Get the code for each char in text
 
-        ArrayList<Boolean> code = new ArrayList<>();
-        HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead);
-        for (Character c : bitsets.keySet()) {
-            code.addAll(bitsets.get(c));
+        FileReader fr = new FileReader(file);
+        BufferedReader bf = new BufferedReader(fr);
+
+        int character; // Is of type int because BufferedReader only allows to read the int value of the char
+        while ((character = bf.read()) != -1)
+        {
+            code.addAll(bitsets.get((char) character));
         }
+
         return arrayListToBitSet(code);
     }
 
     public BitSet arrayListToBitSet(ArrayList<Boolean> code) {
-        int index = 0;
         BitSet bitset = new BitSet();
+
+        int index = 0;
         for (Boolean value: code)
             bitset.set(index++, value);
+
         return bitset;
     }
 
     /**
-     * Recursive method that given a Huffman tree returns the binary code of each character
+     * Recursive method that given a Huffman tree returns the boolean code of each character
      * @param head of the tree
      * @return The encoded version of a given Character
      */
