@@ -12,7 +12,6 @@ public class Node implements Comparable<Node>, Serializable {
     private final int frequency;
     private final Node leftNode;
     private final Node rightNode;
-    private final String key;
 
     /**
      * Constructor
@@ -24,19 +23,17 @@ public class Node implements Comparable<Node>, Serializable {
         this.frequency = leftNode.getFrequency() + rightNode.getFrequency();
         this.leftNode = leftNode;
         this.rightNode = rightNode;
-        this.key = leftNode.getKey() + rightNode.getKey();
     }
 
     /**
      * Second constructor, in case that the Node being created is a leaf Node
      * @param frequency that the node represents
      */
-    public Node(int frequency, String key)
+    public Node(int frequency)
     {
         this.frequency = frequency;
         this.leftNode = null;
         this.rightNode = null;
-        this.key = key;
     }
 
     /**
@@ -54,13 +51,6 @@ public class Node implements Comparable<Node>, Serializable {
      * @return The frequency that the node is representing
      */
     public int getFrequency() { return frequency; }
-
-    /**
-     * @return The key of the leaf node
-     */
-    public String getKey() {
-        return key;
-    }
 
     /**
      * Returns the comparison between the node and a node you give, based on the frequencies of each node,

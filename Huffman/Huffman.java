@@ -23,7 +23,7 @@ public class Huffman {
         BitSet encode = new BitSet();
         int actual = 0;
         for (Character key: frequencies.keySet()) {
-            BitSet c = generateCode(treeHead, key);
+            BitSet c = generateCode(treeHead);
             for (int i = 0; i < c.size(); i++)
                 encode.set(actual++, c.get(i));
         }
@@ -37,6 +37,21 @@ public class Huffman {
      * @param head
      * @return
      */
+    private void generateCode(Node head){
+        BitSet code = new BitSet();
+        generateCode(head, code, 0);
+    }
+    private void generateCode(Node node, BitSet code, int actual){
+        if (node instanceof LeafNode){
+            ((LeafNode) node).setCode(code);
+            return;
+        }
+        code.set(actual, false);
+        generateCode(node.getLeftNode(), code, actual + 1);
+        code.set(actual, true);
+        generateCode(node.getRightNode(), code, actual + 1);
+    }
+    /*
     private BitSet generateCode(Node head, Character key){
         BitSet code = new BitSet();
         return generateCode(head, key, code, 0);
@@ -57,14 +72,14 @@ public class Huffman {
         }
 
     }
-
+*/
     /**
      * Given a compressed file, of the extension .compr, returns the .txt uncompressed version of this file
      * @param compressedFile with the .compr extension
      * @return .txt File
      */
     public File decompressFile(CompressedFile compressedFile)
-    {
+    {/*
         byte[] buffer = new byte[1024];
 
         try {
@@ -102,7 +117,7 @@ public class Huffman {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+        */
         return null;
     }
 
