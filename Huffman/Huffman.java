@@ -168,31 +168,6 @@ public class Huffman {
     }
 
     /**
-     * Recursive method that given a Huffman tree and the hashmap returns the entire compressed
-     * binary code of the file.
-     * @param head
-     * @return
-     */
-    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies){
-        BitSet code = new BitSet();
-        return generateCode(head, node, frequencies, code, 0);
-    }
-    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies, BitSet code, int actual){
-        Node rs = head.getRightNode();
-        Node ls = head.getLeftNode();
-        if (rs == null && ls == null)
-            return code;
-        if (ls != null) {
-            code.set(actual, false);
-            return generateCode(rs, node, frequencies, code, actual + 1);
-        }
-        else {
-            code.set(actual, true);
-            return generateCode(ls, node, frequencies, code, actual + 1);
-        }
-    }
-
-    /**
      * Method that given the name of a file with the extension, returns the name of the file without the extension
      * @param nombreArchivo, the name of the archive with the extension
      * @return the name of the archive without the extension
