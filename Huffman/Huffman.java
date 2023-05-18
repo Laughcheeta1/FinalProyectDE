@@ -29,7 +29,19 @@ public class Huffman {
     public BitSet getEncodedText(Node treeHead){
 
         ArrayList<Boolean> code = new ArrayList<>();
-        code.addAll(generateCode(treeHead));
+        HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead);
+        for (Character c : bitsets.keySet()) {
+            code.addAll(bitsets.get(c));
+        }
+        return arrayListToBitSet(code);
+    }
+
+    public BitSet arrayListToBitSet(ArrayList<Boolean> code) {
+        int index = 0;
+        BitSet bitset = new BitSet();
+        for (Boolean value: code)
+            bitset.set(index++, value);
+        return bitset;
     }
 
     /**
@@ -37,20 +49,22 @@ public class Huffman {
      * @param head of the tree
      * @return The encoded version of a given Character
      */
-    private HashMap<Character, BitSet> generateCode(Node head){
+    private HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
         BitSet code = new BitSet();
-        HashMap<Character, BitSet> bitsets = new HashMap<>();
-        return generateCode(head, code, 0, bitsets);
+        HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
+        ArrayList<Boolean> actual = new ArrayList<>();
+        return generateCode(head, code, actual, bitsets);
     }
-    private HashMap<Character, BitSet> generateCode(Node node, BitSet code, int actual, HashMap<Character, BitSet> bitsets){
+    private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, BitSet code, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
         if (node instanceof LeafNode) {
-            bitsets.put(((LeafNode) node).getValue(), code);
+            bitsets.get(((LeafNode) node).getValue()).addAll(actual);
             return bitsets;
         }
-        code.set(actual, false);
-        bitsets = generateCode(node.getLeftNode(), code, actual + 1, bitsets);
-        code.set(actual, true);
-        bitsets = generateCode(node.getRightNode(), code, actual + 1, bitsets);
+        actual.add(false);
+        bitsets = generateCode(node.getLeftNode(), code, actual, bitsets);
+        actual.remove(actual.size() - 1);
+        actual.add(true);
+        bitsets = generateCode(node.getRightNode(), code, actual, bitsets);
         return bitsets;
     }
 
