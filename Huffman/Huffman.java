@@ -24,7 +24,14 @@ public class Huffman {
         return new CompressedFile(treeHead, encoding);
     }
 
-    public BitSet getEncodedText(Node treeHead, File file) throws IOException {
+    /**
+     * Turns the text to bitset
+     * @param treeHead
+     * @param file
+     * @return The enconded vertion of the text, in the form of a bitset
+     * @throws IOException
+     */
+    private BitSet getEncodedText(Node treeHead, File file) throws IOException {
         ArrayList<Boolean> code = new ArrayList<>(); // Stores an array of booleans that later will become bits
         HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead); // Get the code for each char in text
 
@@ -40,7 +47,12 @@ public class Huffman {
         return arrayListToBitSet(code);
     }
 
-    public BitSet arrayListToBitSet(ArrayList<Boolean> code) {
+    /**
+     * Given a boolean ArrayList, return the bitset of the code
+     * @param code
+     * @return The bitset
+     */
+    private BitSet arrayListToBitSet(ArrayList<Boolean> code) {
         BitSet bitset = new BitSet();
 
         int index = 0;
@@ -51,26 +63,33 @@ public class Huffman {
     }
 
     /**
-     * Recursive method that given a Huffman tree returns the boolean code of each character
+     * Recursive method that given a Huffman tree returns the boolean code of each character in the text
      * @param head of the tree
      * @return The encoded version of a given Character
      */
     private HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
-        BitSet code = new BitSet();
         HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
         ArrayList<Boolean> actual = new ArrayList<>();
-        return generateCode(head, code, actual, bitsets);
+        return generateCode(head, actual, bitsets);
     }
-    private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, BitSet code, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
+
+    /**
+     * Recursive method that does the work
+     * @param node, head node of the huffman tree
+     * @param actual, code that has been generated up until now
+     * @param bitsets, the HashMap that stores the codes
+     * @return HashMap that has all the codes
+     */
+    private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
         if (node instanceof LeafNode) {
-            bitsets.get(((LeafNode) node).getValue()).addAll(actual);
+            bitsets.put(((LeafNode) node).getValue(), actual);
             return bitsets;
         }
         actual.add(false);
-        bitsets = generateCode(node.getLeftNode(), code, actual, bitsets);
+        bitsets = generateCode(node.getLeftNode(),actual, bitsets);
         actual.remove(actual.size() - 1);
         actual.add(true);
-        bitsets = generateCode(node.getRightNode(), code, actual, bitsets);
+        bitsets = generateCode(node.getRightNode(), actual, bitsets);
         return bitsets;
     }
 
