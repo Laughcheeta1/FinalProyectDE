@@ -1,6 +1,7 @@
 package Huffman;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -20,55 +21,39 @@ public class Huffman {
         Node treeHead = createHuffmanTree(countCharacters(file));
         HashMap<Character, Integer> frequencies = countCharacters(file);
         BitSet encode = new BitSet();
-        int actual = 0;
-        generateCode(treeHead);
+
 
         return new CompressedFile(treeHead, encode);
     }
 
+    public BitSet getEncodedText(Node treeHead){
+
+        ArrayList<Boolean> code = new ArrayList<>();
+        code.addAll(generateCode(treeHead));
+    }
 
     /**
-     * Recursive method that given a Huffman tree and the node to search returns the character
-     * binary code.
+     * Recursive method that given a Huffman tree returns the binary code of each character
      * @param head of the tree
      * @return The encoded version of a given Character
      */
-    private void generateCode(Node head){
+    private HashMap<Character, BitSet> generateCode(Node head){
         BitSet code = new BitSet();
-        generateCode(head, code, 0);
+        HashMap<Character, BitSet> bitsets = new HashMap<>();
+        return generateCode(head, code, 0, bitsets);
     }
-    private void generateCode(Node node, BitSet code, int actual){
-        if (node instanceof LeafNode){
-            ((LeafNode) node).setCode(code);
-            return;
+    private HashMap<Character, BitSet> generateCode(Node node, BitSet code, int actual, HashMap<Character, BitSet> bitsets){
+        if (node instanceof LeafNode) {
+            bitsets.put(((LeafNode) node).getValue(), code);
+            return bitsets;
         }
         code.set(actual, false);
-        generateCode(node.getLeftNode(), code, actual + 1);
+        bitsets = generateCode(node.getLeftNode(), code, actual + 1, bitsets);
         code.set(actual, true);
-        generateCode(node.getRightNode(), code, actual + 1);
+        bitsets = generateCode(node.getRightNode(), code, actual + 1, bitsets);
+        return bitsets;
     }
-    /*
-    private BitSet generateCode(Node head, Character key){
-        BitSet code = new BitSet();
-        return generateCode(head, key, code, 0);
-    }
-    private BitSet generateCode(Node head, Character key, BitSet code, int actual){
-        Node rs = head.getRightNode();
-        Node ls = head.getLeftNode();
-        if (rs == null && ls == null) {
-            return code;
-        }
-        else if (ls != null && ls.getKey().contains(String.valueOf(key))) {
-            code.set(actual, false);
-            return generateCode(ls, key, code, actual + 1);
-        }
-        else {
-            code.set(actual, true);
-            return generateCode(rs, key, code, actual + 1);
-        }
 
-    }
-*/
     /**
      * Given a compressed file, of the extension .compr, returns the .txt uncompressed version of this file
      * @param compressedFile with the .compr extension
