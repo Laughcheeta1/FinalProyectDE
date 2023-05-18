@@ -99,11 +99,22 @@ public class Huffman {
      * @param head
      * @return
      */
-    private BitSet generateCode(Node head, HashMap<Character, Integer> frequencies){
+    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies){
         BitSet code = new BitSet();
-        return generateCode(head, frequencies, code);
+        return generateCode(head, node, frequencies, code, 0);
     }
-    private BitSet generateCode(Node head, HashMap<Character, Integer> frequiencies, BitSet code){
-        return null;
+    private BitSet generateCode(Node head, Node node, HashMap<Character, Integer> frequencies, BitSet code, int actual){
+        Node rs = head.getRightNode();
+        Node ls = head.getLeftNode();
+        if (rs == null && ls == null)
+            return code;
+        if (ls != null) {
+            code.set(actual, false);
+            return generateCode(rs, node, frequencies, code, actual + 1);
+        }
+        else {
+            code.set(actual, true);
+            return generateCode(ls, node, frequencies, code, actual + 1);
+        }
     }
 }
