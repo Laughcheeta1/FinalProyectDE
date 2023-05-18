@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.zip.*;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
@@ -35,8 +34,8 @@ public class Huffman {
     /**
      * Recursive method that given a Huffman tree and the node to search returns the character
      * binary code.
-     * @param head
-     * @return
+     * @param head of the tree
+     * @return The encoded version of a given Character
      */
     private BitSet generateCode(Node head, Character key){
         BitSet code = new BitSet();
@@ -48,7 +47,7 @@ public class Huffman {
         if (rs == null && ls == null) {
             return code;
         }
-        if (ls != null && ls.getKey().contains(String.valueOf(key))) {
+        else if (ls != null && ls.getKey().contains(String.valueOf(key))) {
             code.set(actual, false);
             return generateCode(ls, key, code, actual + 1);
         }
