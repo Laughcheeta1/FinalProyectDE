@@ -1,6 +1,7 @@
 package Huffman;
 
 import java.io.*;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -88,7 +89,21 @@ public class Huffman {
             list.add(new Node(list.poll(), list.poll()));
         }
 
-        // The last remaining element of the queue is the  of the created tree
+        // The last remaining element of the queue is the head of the created tree
         return list.poll();
+    }
+
+    /**
+     * Recursive method that given a Huffman tree and the hashmap returns the entire compressed
+     * binary code of the file.
+     * @param head
+     * @return
+     */
+    private BitSet generateCode(Node head, HashMap<Character, Integer> frequencies){
+        BitSet code = new BitSet();
+        return generateCode(head, frequencies, code);
+    }
+    private BitSet generateCode(Node head, HashMap<Character, Integer> frequiencies, BitSet code){
+        return null;
     }
 }
