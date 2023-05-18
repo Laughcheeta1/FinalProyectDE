@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.zip.*;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
@@ -22,11 +21,8 @@ public class Huffman {
         HashMap<Character, Integer> frequencies = countCharacters(file);
         BitSet encode = new BitSet();
         int actual = 0;
-        for (Character key: frequencies.keySet()) {
-            BitSet c = generateCode(treeHead);
-            for (int i = 0; i < c.size(); i++)
-                encode.set(actual++, c.get(i));
-        }
+        generateCode(treeHead);
+
         return new CompressedFile(treeHead, encode);
     }
 
@@ -34,8 +30,8 @@ public class Huffman {
     /**
      * Recursive method that given a Huffman tree and the node to search returns the character
      * binary code.
-     * @param head
-     * @return
+     * @param head of the tree
+     * @return The encoded version of a given Character
      */
     private void generateCode(Node head){
         BitSet code = new BitSet();
@@ -62,7 +58,7 @@ public class Huffman {
         if (rs == null && ls == null) {
             return code;
         }
-        if (ls != null && ls.getKey().contains(String.valueOf(key))) {
+        else if (ls != null && ls.getKey().contains(String.valueOf(key))) {
             code.set(actual, false);
             return generateCode(ls, key, code, actual + 1);
         }
@@ -81,6 +77,7 @@ public class Huffman {
     public File decompressFile(CompressedFile compressedFile)
     {/*
         byte[] buffer = new byte[1024];
+<<<<<<< HEAD
 
         try {
             File carpetaDestino = new File(directorioDestino);
@@ -118,6 +115,7 @@ public class Huffman {
             e.printStackTrace();
         }
         */
+
         return null;
     }
 
