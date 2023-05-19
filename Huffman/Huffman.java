@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.zip.*;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
@@ -98,9 +99,43 @@ public class Huffman {
      * @param compressedFile with the .compr extension
      * @return .txt File
      */
-    public File decompressFile(CompressedFile compressedFile)
-    {
-        return null;
+    public File decompressFile(File compressedFile) {
+        File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(compressedFile);
+            GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
+            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = gzipInputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            fileOutputStream.close();
+            gzipInputStream.close();
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return outputFile;
+    }
+
+    /**
+     * Obtiene el nombre de archivo sin la extensión.
+     *
+     * @param file El archivo del cual se desea obtener el nombre sin extensión.
+     * @return El nombre del archivo sin la extensión.
+     */
+    private String getFileNameWithoutExtension(File file) {
+        String fileName = file.getName();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(0, dotIndex);
+        }
+        return fileName;
     }
 
     /**
