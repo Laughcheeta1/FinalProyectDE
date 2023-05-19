@@ -10,7 +10,6 @@ import java.util.BitSet;
 
 public class LeafNode extends Node implements Serializable {
     private final char value;
-    private BitSet code;
 
     /**
      * Constructor for the leadNode.
@@ -21,7 +20,6 @@ public class LeafNode extends Node implements Serializable {
     {
         super(frequency);
         this.value = value;
-        code = new BitSet();
     }
 
     /**
@@ -30,9 +28,5 @@ public class LeafNode extends Node implements Serializable {
      */
     public char getValue() {
         return value;
-    }
-
-    public void setCode(BitSet code) {
-        this.code = code;
     }
 }
