@@ -19,6 +19,7 @@ public class Huffman {
      */
     public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
+        // Nos falta hacer que el archivo que devuelve, tenga el nombre del archivo original, toca pensar como hacerlo
         Node treeHead = createHuffmanTree(countCharacters(file));
         BitSet encoding = getEncodedText(treeHead, file);
 
@@ -99,26 +100,21 @@ public class Huffman {
      * @param compressedFile with the .compr extension
      * @return .txt File
      */
-    public File decompressFile(File compressedFile) {
+    public File decompressFile(File compressedFile) throws IOException {
         File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
 
-        try {
-            FileInputStream fileInputStream = new FileInputStream(compressedFile);
-            GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+        FileInputStream fileInputStream = new FileInputStream(compressedFile);
+        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
+        FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = gzipInputStream.read(buffer)) > 0) {
-                fileOutputStream.write(buffer, 0, bytesRead);
-            }
-
-            fileOutputStream.close();
-            gzipInputStream.close();
-            fileInputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = gzipInputStream.read(buffer)) > 0) {
+            fileOutputStream.write(buffer, 0, bytesRead);
         }
+        fileOutputStream.close();
+        gzipInputStream.close();
+        fileInputStream.close();
 
         return outputFile;
     }
