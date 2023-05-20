@@ -9,14 +9,14 @@ import java.io.Serializable;
  */
 
 public class Node implements Comparable<Node>, Serializable {
-    private final int frequency;
-    private final Node leftNode;
-    private final Node rightNode;
+    private final int frequency; // Frequency that the node represents
+    private final Node leftNode; // Left node child
+    private final Node rightNode; // Right node child
 
     /**
      * Constructor
-     * @param leftNode
-     * @param rightNode
+     * @param leftNode - The left son of the node
+     * @param rightNode - The right son of the node
      */
     public Node(Node leftNode, Node rightNode)
     {

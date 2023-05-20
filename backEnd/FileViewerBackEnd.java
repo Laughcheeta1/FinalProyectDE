@@ -1,27 +1,10 @@
 package backEnd;
 
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 /**
  * Creator: 
  * This class is the back end of the TextViewer program.
  */
-
 public class FileViewerBackEnd {
-	/**
-	 * Returns the path of the download folder
-	 * @return path of the download folder
-	 */
-    public static Path downloadsPath() {
-		return Paths.get(System.getProperty("user.home"), "Downloads");
-	}
-
 	/**
 	 * checks if a file exists for the given path
 	 * @param path of the file

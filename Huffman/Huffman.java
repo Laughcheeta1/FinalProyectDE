@@ -1,27 +1,26 @@
 package Huffman;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.util.zip.InflaterInputStream;
+import java.io.File;
+
 
 /**
+ * This is where the compressing and decompressing of files using the Huffman algorithm happens
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
  */
-
 public class Huffman {
     /**
      * Given a .txt file, returns the compressed version of this file in the way of a CompressedFile class object.
      * @param file to compress
      * @return CompressedFile object.
      */
-    public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
+    public CompressedFile compressTxt(File file) throws IOException
     {
         Node treeHead = createHuffmanTree(countCharacters(file));
         // Need this variable in order to save the amount of bits we are using
@@ -48,7 +47,7 @@ public class Huffman {
         int character; // Is of type int because BufferedReader only allows to read the int value of the char
         while ((character = bf.read()) != -1)
         {
-            code.addAll(bitsets.get((char) character));
+            code.addAll(bitsets.get((char) character)); // Retrieve the encoding for a given char, and add it
         }
 
         return code;
@@ -75,90 +74,100 @@ public class Huffman {
 
     /**
      * Recursive method that given a Huffman tree returns the boolean code of each character in the text
-     * @param head of the tree
+     * @param head - head of the Huffman tree
      * @return The encoded version of a given Character
      */
     private HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
         HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
         ArrayList<Boolean> actual = new ArrayList<>();
+
         return generateCode(head, actual, bitsets);
     }
 
     /**
-     * Recursive method that does the work
-     * @param node, head node of the huffman tree
-     * @param actual, code that has been generated up until now
-     * @param bitsets, the HashMap that stores the codes
+     * Recursive method that generates the code for all the characters in the text, by traversing the tree in a
+     *  DFS manner, each left turn corresponds to a 0 and each right turn corresponds to a 1
+     * @param node - current node we are traversing in the huffman tree
+     * @param actual - code that has been generated up until now
+     * @param bitsets - the HashMap that stores the codes
      * @return HashMap that has all the codes
      */
     private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
         if (node instanceof LeafNode) {
+            // If we get to a leaf node, we can stop generating the code, and assign the char contained in the leaf
+                // node, its code.
             ArrayList<Boolean> codeOfTheNode = new ArrayList<>(actual);
             bitsets.put(((LeafNode) node).getValue(), codeOfTheNode);
-            return bitsets;
         }
-        actual.add(false);
-        bitsets = generateCode(node.getLeftNode(),actual, bitsets);
-        actual.remove(actual.size() - 1);
-        actual.add(true);
-        bitsets = generateCode(node.getRightNode(), actual, bitsets);
+        else
+        {
+            // Keep going down the tree generating codes
+            actual.add(false);
+            bitsets = generateCode(node.getLeftNode(),actual, bitsets);
+            actual.remove(actual.size() - 1);
+            actual.add(true);
+            bitsets = generateCode(node.getRightNode(), actual, bitsets);
+        }
+
         return bitsets;
     }
 
     /**
-     * Given a compressed file, of the extension .compr, returns the .txt uncompressed version of this file
-     * @param compressedFile with the .compr extension
-     * @return .txt File
+     * Given a compressed text, returns the uncompressed version of the text contained in it
+     * @param compressedFile - An CompressedFile object, that contains the desired text to decompress
+     * @return decompressed text, in form of a String, contained in the compressedFile
      */
-    public File decompressFile(CompressedFile compressedFile) throws IOException {
-        File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
+    public String decompressFile(CompressedFile compressedFile) {
+        Node treeHead = compressedFile.treeHead();
+        BitSet encoding = compressedFile.encoding();
+        int sizeOfTheCode = compressedFile.sizeOfTheCode();
 
-        InputStream inputStream = Files.newInputStream(compressedFile.getPath());
-        InflaterInputStream inflaterInputStream = new InflaterInputStream(inputStream);
-        OutputStream outputStream = Files.newOutputStream(outputFile.toPath());
-
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = inflaterInputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, bytesRead);
-        }
-
-        outputStream.close();
-        inflaterInputStream.close();
-        inputStream.close();
-
-        return outputFile;
+        // Decompress the bit sequence using the HuffmanTree
+        return decodeText(treeHead, encoding, sizeOfTheCode);
     }
 
     /**
-     * Obtiene el nombre de archivo sin la extensión.
-     *
-     * @param file El archivo del cual se desea obtener el nombre sin extensión.
-     * @return El nombre del archivo sin la extensión.
+     * Decodes the bits sequence using the Huffman tree, and returns the decompressed text
+     * @param treeHead - The head of the Huffman tree
+     * @param encoding - the bit sequence containing the compressed text
+     * @param sizeOfTheCode - the amount of bits that compose the encoded message
+     * @return the decompressed text in a String form
      */
-    private String getFileNameWithoutExtension(CompressedFile file) {
-        String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex > 0) {
-            return fileName.substring(0, dotIndex);
+    private String decodeText(Node treeHead, BitSet encoding, int sizeOfTheCode) {
+        StringBuilder decompressedText = new StringBuilder();
+        Node currentNode = treeHead; // We start the decoding in the Tree head
+
+        int i = 0;
+        while (i < sizeOfTheCode) { // Only decode the amount of bits that we are using
+            if (encoding.get(i)) {
+                currentNode = currentNode.getRightNode(); // If the bit is a one, go right
+            } else {
+                currentNode = currentNode.getLeftNode(); // If the bit is a zero, go left
+            }
+
+            // When we get to a leaf, means we have finished decoding one of the characters
+            if (currentNode instanceof LeafNode) {
+                decompressedText.append(((LeafNode) currentNode).getValue());
+                currentNode = treeHead; // Restart from the tree root
+            }
+
+            i++;
         }
-        return fileName;
+
+        return decompressedText.toString();
     }
+
+
+
 
     /**
      * Given a file returns the count of the characters in form of a hashmap, where its key is the
      * character, and the value is the frequency of the character.
-     * @param file to count the number of characters
+     * @param file - File to count the number of characters
      * @return HashMap that contains the number of chars
      */
-    private HashMap<Character, Integer> countCharacters(File file) throws FileExtensionException, IOException
+    private HashMap<Character, Integer> countCharacters(File file) throws IOException
     {
-        // Check that the file is of the correct type
-        if (!file.getName().endsWith(".txt") || file.getName().isBlank())
-        {
-            throw new FileExtensionException();
-        }
-
         // Create the needed resources
         HashMap<Character, Integer> count = new HashMap<>();
         FileReader fr = new FileReader(file);
@@ -169,10 +178,10 @@ public class Huffman {
         int character; // Is of type int because BufferedReader only allows to read the int value of the char
         while ((character = br.read()) != -1)
         {
-            if (count.containsKey((char) character))
+            if (count.containsKey((char) character)) // If char is contained, just add 1 to its frequency
                 count.replace((char) character, count.get((char) character) + 1);
 
-            else
+            else // If the char is not contained, add it
                 count.put((char) character, 1);
         }
 
@@ -182,7 +191,7 @@ public class Huffman {
 
     /**
      * Given a HashMap that stores the frequencies returns the Tree head of the Huffman tree
-     * @param frequencies of the characters
+     * @param frequencies - HashMap containing the frequency of the characters
      * @return Head node of the tree
      */
     private Node createHuffmanTree(HashMap<Character, Integer> frequencies)
@@ -205,19 +214,4 @@ public class Huffman {
         // The last remaining element of the queue is the head of the created tree
         return list.poll();
     }
-
-    /**
-     * Method that given the name of a file with the extension, returns the name of the file without the extension
-     * @param nombreArchivo, the name of the archive with the extension
-     * @return the name of the archive without the extension
-     */
-    private static String obtenerNombreSinExtension(String nombreArchivo) {
-        // This method will probably be eliminated, since it has no need to be used. It will stick around for now.
-        int indicePunto = nombreArchivo.lastIndexOf(".");
-        if (indicePunto != -1) {
-            return nombreArchivo.substring(0, indicePunto);
-        }
-        return nombreArchivo;
-    }
-
 }
