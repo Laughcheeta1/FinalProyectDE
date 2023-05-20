@@ -148,6 +148,12 @@ public class Huffman {
         Node currentNode = treeHead;
 
         for (boolean bit : encoding) {
+            if (bit) {
+                currentNode = currentNode.getRightNode();
+            } else {
+                currentNode = currentNode.getLeftNode();
+            }
+
             if (currentNode instanceof LeafNode) {
                 decompressedText.append(((LeafNode) currentNode).getValue());
 
@@ -155,11 +161,6 @@ public class Huffman {
                     break; // Se alcanzó el tamaño original del archivo, salir del bucle
 
                 currentNode = treeHead; // Reiniciar desde la raíz del árbol
-            }
-            else if (bit) {
-                currentNode = currentNode.getRightNode();
-            } else {
-                currentNode = currentNode.getLeftNode();
             }
         }
 
