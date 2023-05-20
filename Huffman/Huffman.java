@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.zip.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.util.zip.InflaterInputStream;
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
@@ -107,25 +111,23 @@ public class Huffman {
      * @return .txt File
      */
     public File decompressFile(CompressedFile compressedFile) throws IOException {
-        // Debe de recibir un compressedFile, y utilizar la info dentro del CompressedFile para retornar el archivo.
+        File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
 
-        /*File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
-
-        FileInputStream fileInputStream = new FileInputStream(compressedFile);
-        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
-        FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+        InputStream inputStream = Files.newInputStream(compressedFile.getPath());
+        InflaterInputStream inflaterInputStream = new InflaterInputStream(inputStream);
+        OutputStream outputStream = Files.newOutputStream(outputFile.toPath());
 
         byte[] buffer = new byte[1024];
         int bytesRead;
-        while ((bytesRead = gzipInputStream.read(buffer)) > 0) {
-            fileOutputStream.write(buffer, 0, bytesRead);
+        while ((bytesRead = inflaterInputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, bytesRead);
         }
-        fileOutputStream.close();
-        gzipInputStream.close();
-        fileInputStream.close();
 
-        return outputFile;*/
-        return null;
+        outputStream.close();
+        inflaterInputStream.close();
+        inputStream.close();
+
+        return outputFile;
     }
 
     /**
@@ -134,10 +136,10 @@ public class Huffman {
      * @param file El archivo del cual se desea obtener el nombre sin extensión.
      * @return El nombre del archivo sin la extensión.
      */
-    private String getFileNameWithoutExtension(File file) {
+    private String getFileNameWithoutExtension(CompressedFile file) {
         String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex > 0) {
             return fileName.substring(0, dotIndex);
         }
         return fileName;
