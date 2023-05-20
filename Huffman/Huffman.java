@@ -19,21 +19,22 @@ public class Huffman {
      */
     public CompressedFile compressTxt(File file) throws FileExtensionException, IOException
     {
-        // Nos falta hacer que el archivo que devuelve, tenga el nombre del archivo original, toca pensar como hacerlo
         Node treeHead = createHuffmanTree(countCharacters(file));
-        BitSet encoding = getEncodedText(treeHead, file);
+        // Need this variable in order to save the amount of bits we are using
+        ArrayList<Boolean> encodingBooleanVersion = getEncodedText(treeHead, file);
+        BitSet encoding = arrayListToBitSet(encodingBooleanVersion);
 
-        return new CompressedFile(treeHead, encoding);
+        return new CompressedFile(treeHead, encoding, encodingBooleanVersion.size());
     }
 
     /**
      * Turns the text to bitset
-     * @param treeHead
-     * @param file
-     * @return The enconded vertion of the text, in the form of a bitset
-     * @throws IOException
+     * @param treeHead - Head of the Huffman tree
+     * @param file - .txt file that contains the text
+     * @return The encoded version of the text, in the form of a bitset
+     * @throws IOException - if the file does not exist
      */
-    private BitSet getEncodedText(Node treeHead, File file) throws IOException {
+    private ArrayList<Boolean> getEncodedText(Node treeHead, File file) throws IOException {
         ArrayList<Boolean> code = new ArrayList<>(); // Stores an array of booleans that later will become bits
         HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead); // Get the code for each char in text
 
@@ -46,22 +47,20 @@ public class Huffman {
             code.addAll(bitsets.get((char) character));
         }
 
-        return arrayListToBitSet(code);
+        return code;
     }
 
     /**
-     * Given a boolean ArrayList, return the bitset of the code
-     * @param code
-     * @return The bitset
+     * Given a boolean ArrayList, return the bitset version of the ArrayList
+     * @param code - Arraylist to convert
+     * @return The bitset version
      */
     private BitSet arrayListToBitSet(ArrayList<Boolean> code) {
-        // The problem is here, the bitset automatically is created using 64 bits, and in the test we are running,
-            // we are only using 9 bits, leading to the rest of the bits being automatically 0, so we need to
-            // search for a way that the size of the bitset is exactly the size of the array list "code"
-        int x = code.size(); // With the test I'm running, x = 9;
+        int x = code.size();
+        // Give the BitSet the amount of bits we are going to use, so it allocates the necessary memory
         BitSet bitset = new BitSet(x);
-        System.out.println(bitset.size());
 
+        // Turn the Booleans to bits
         for (int i = 0; i < x; i++)
         {
             bitset.set(i, code.get(i));
@@ -107,7 +106,9 @@ public class Huffman {
      * @param compressedFile with the .compr extension
      * @return .txt File
      */
-    public File decompressFile(File compressedFile) throws IOException {
+    public File decompressFile(CompressedFile compressedFile) throws IOException {
+        // Debe de recibir un compressedFile, y utilizar la info dentro del CompressedFile para retornar el archivo.
+
         File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
 
         FileInputStream fileInputStream = new FileInputStream(compressedFile);
@@ -208,6 +209,7 @@ public class Huffman {
      * @return the name of the archive without the extension
      */
     private static String obtenerNombreSinExtension(String nombreArchivo) {
+        // This method will probably be eliminated, since it has no need to be used. It will stick around for now.
         int indicePunto = nombreArchivo.lastIndexOf(".");
         if (indicePunto != -1) {
             return nombreArchivo.substring(0, indicePunto);
