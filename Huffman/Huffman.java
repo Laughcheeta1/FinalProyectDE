@@ -106,11 +106,12 @@ public class Huffman {
     }
 
     /**
-     * Given a compressed file, of the extension .compr, returns the .txt uncompressed version of this file
-     * @param compressedFile with the .compr extension
-     * @return .txt File
+     * Given a compressed text, returns the uncompressed version of the text contained in it
+     * @param compressedFile - An CompressedFile object, that contains the desired text to decompress
+     * @return text contained in the compressedFile
      */
-    public File decompressFile(CompressedFile compressedFile) throws IOException {
+    public String decompressFile(CompressedFile compressedFile) throws IOException {
+        /*
         File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
 
         InputStream inputStream = Files.newInputStream(compressedFile.getPath());
@@ -127,7 +128,8 @@ public class Huffman {
         inflaterInputStream.close();
         inputStream.close();
 
-        return outputFile;
+        return outputFile;*/
+        return null;
     }
 
     /**
