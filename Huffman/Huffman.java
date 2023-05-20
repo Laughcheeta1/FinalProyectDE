@@ -55,11 +55,17 @@ public class Huffman {
      * @return The bitset
      */
     private BitSet arrayListToBitSet(ArrayList<Boolean> code) {
-        BitSet bitset = new BitSet();
+        // The problem is here, the bitset automatically is created using 64 bits, and in the test we are running,
+            // we are only using 9 bits, leading to the rest of the bits being automatically 0, so we need to
+            // search for a way that the size of the bitset is exactly the size of the array list "code"
+        int x = code.size(); // With the test I'm running, x = 9;
+        BitSet bitset = new BitSet(x);
+        System.out.println(bitset.size());
 
-        int index = 0;
-        for (Boolean value: code)
-            bitset.set(index++, value);
+        for (int i = 0; i < x; i++)
+        {
+            bitset.set(i, code.get(i));
+        }
 
         return bitset;
     }
@@ -84,7 +90,8 @@ public class Huffman {
      */
     private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
         if (node instanceof LeafNode) {
-            bitsets.put(((LeafNode) node).getValue(), actual);
+            ArrayList<Boolean> codeOfTheNode = new ArrayList<>(actual);
+            bitsets.put(((LeafNode) node).getValue(), codeOfTheNode);
             return bitsets;
         }
         actual.add(false);
