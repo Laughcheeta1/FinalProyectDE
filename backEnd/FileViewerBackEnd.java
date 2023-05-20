@@ -62,6 +62,26 @@ public class FileViewerBackEnd {
 		Desktop.getDesktop().open(file); //Se abre el archivo
 	}
 
+	public static boolean isFileCompressed(String filePath) { // Ingresa la dirección o ruta del archivo
+		File file = new File(filePath);
+		String extension = getFileExtension(file.getName());
+		if (extension.equalsIgnoreCase("compr"))
+			return true;
+		else
+			return false;
+	}
+
+	private static String getFileExtension(String fileName) {
+		int Index = fileName.lastIndexOf(".");
+		if (Index == -1 || Index == fileName.length() - 1) {
+	        	/* Se verifica si el Indice es -1 o si el punto está al final del archivo para comprobar
+	        		que la extensión sea valida, si es invalida retorna ("") */
+			return "";
+		}
+		return fileName.substring(Index + 1); /* Se implementa para retornar la subcadena que se
+		     											encuentra despues del punto */
+	}
+
     // main method  · Susana Uribe
     public static void main(String[] args) throws IOException {
 		String textForPath=downloadsPath().toString(); //We use this automatically in the space for the path
