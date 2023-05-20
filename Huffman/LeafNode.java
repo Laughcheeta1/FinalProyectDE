@@ -1,7 +1,6 @@
 package Huffman;
 
 import java.io.Serializable;
-import java.util.BitSet;
 
 /**
  * Santiago Yepes Mesa.
@@ -9,12 +8,12 @@ import java.util.BitSet;
  */
 
 public class LeafNode extends Node implements Serializable {
-    private final char value;
+    private final char value; // Char stored by the leaf node
 
     /**
      * Constructor for the leadNode.
-     * @param value char that the node represents
-     * @param frequency that the node represents
+     * @param value  - Char that the node represents
+     * @param frequency - Frequency that the node represents
      */
     public LeafNode(char value, int frequency)
     {
