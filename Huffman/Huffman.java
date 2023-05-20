@@ -114,25 +114,8 @@ public class Huffman {
         BitSet encoding = compressedFile.encoding();
         int sizeOfTheCode = compressedFile.sizeOfTheCode();
 
-        // Obtener la secuencia de bits comprimidos del BitSet
-        ArrayList<Boolean> encodingBooleanVersion = bitSetToArrayList(encoding, sizeOfTheCode);
-
         // Descomprimir la secuencia de bits utilizando el árbol de Huffman
-        return decodeText(treeHead, encodingBooleanVersion, sizeOfTheCode);
-    }
-
-    /**
-     *Given bitset version of the ArrayList a boolean ArrayList, return a boolean ArrayList
-     *
-     * @param bitSet el BitSet a convertir
-     * @return la lista de booleanos correspondiente al BitSet
-     */
-    private ArrayList<Boolean> bitSetToArrayList(BitSet bitSet, int sizeOfTheCode) {
-        ArrayList<Boolean> booleanList = new ArrayList<>();
-        for (int i = 0; i < sizeOfTheCode; i++) {
-            booleanList.add(bitSet.get(i));
-        }
-        return booleanList;
+        return decodeText(treeHead, encoding, sizeOfTheCode);
     }
 
     /**
@@ -143,11 +126,14 @@ public class Huffman {
      * @param originalFileSize  el tamaño original del archivo antes de la compresión
      * @return el texto descomprimido
      */
-    private String decodeText(Node treeHead, ArrayList<Boolean> encoding, int originalFileSize) {
+    private String decodeText(Node treeHead, BitSet encoding, int originalFileSize) {
         StringBuilder decompressedText = new StringBuilder();
         Node currentNode = treeHead;
+        int i = 0;
 
-        for (boolean bit : encoding) {
+        while (i < originalFileSize) {
+            boolean bit = encoding.get(i);
+
             if (bit) {
                 currentNode = currentNode.getRightNode();
             } else {
@@ -156,16 +142,21 @@ public class Huffman {
 
             if (currentNode instanceof LeafNode) {
                 decompressedText.append(((LeafNode) currentNode).getValue());
+                i++;
 
-                if (decompressedText.length() == originalFileSize)
+                if (decompressedText.length() == originalFileSize) {
                     break; // Se alcanzó el tamaño original del archivo, salir del bucle
+                }
 
                 currentNode = treeHead; // Reiniciar desde la raíz del árbol
             }
+
+            i++;
         }
 
         return decompressedText.toString();
     }
+
 
 
 
