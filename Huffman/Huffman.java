@@ -110,17 +110,15 @@ public class Huffman {
      * @return text contained in the compressedFile
      */
     public String decompressFile(CompressedFile compressedFile) throws IOException {
-        Node treeHead = compressedFile.getTreeHead();
-        BitSet encoding = compressedFile.getEncoding();
-        int originalFileSize = compressedFile.getOriginalFileSize();
+        Node treeHead = compressedFile.treeHead();
+        BitSet encoding = compressedFile.encoding();
+        int sizeOfTheCode = compressedFile.sizeOfTheCode();
 
         // Obtener la secuencia de bits comprimidos del BitSet
-        ArrayList<Boolean> encodingBooleanVersion = bitSetToArrayList(encoding);
+        ArrayList<Boolean> encodingBooleanVersion = bitSetToArrayList(encoding, sizeOfTheCode);
 
         // Descomprimir la secuencia de bits utilizando el árbol de Huffman
-        StringBuilder decompressedText = decodeText(treeHead, encodingBooleanVersion, originalFileSize);
-
-        return decompressedText.toString();
+        return decodeText(treeHead, encodingBooleanVersion, sizeOfTheCode);
     }
 
     /**
@@ -129,9 +127,9 @@ public class Huffman {
      * @param bitSet el BitSet a convertir
      * @return la lista de booleanos correspondiente al BitSet
      */
-    private ArrayList<Boolean> bitSetToArrayList(BitSet bitSet) {
+    private ArrayList<Boolean> bitSetToArrayList(BitSet bitSet, int sizeOfTheCode) {
         ArrayList<Boolean> booleanList = new ArrayList<>();
-        for (int i = 0; i < bitSet.length(); i++) {
+        for (int i = 0; i < sizeOfTheCode; i++) {
             booleanList.add(bitSet.get(i));
         }
         return booleanList;
@@ -145,27 +143,27 @@ public class Huffman {
      * @param originalFileSize  el tamaño original del archivo antes de la compresión
      * @return el texto descomprimido
      */
-    private StringBuilder decodeText(Node treeHead, ArrayList<Boolean> encoding, int originalFileSize) {
+    private String decodeText(Node treeHead, ArrayList<Boolean> encoding, int originalFileSize) {
         StringBuilder decompressedText = new StringBuilder();
         Node currentNode = treeHead;
 
         for (boolean bit : encoding) {
-            if (bit) {
+            if (currentNode instanceof LeafNode) {
+                decompressedText.append(((LeafNode) currentNode).getValue());
+
+                if (decompressedText.length() == originalFileSize)
+                    break; // Se alcanzó el tamaño original del archivo, salir del bucle
+
+                currentNode = treeHead; // Reiniciar desde la raíz del árbol
+            }
+            else if (bit) {
                 currentNode = currentNode.getRightNode();
             } else {
                 currentNode = currentNode.getLeftNode();
             }
-
-            if (currentNode instanceof LeafNode) {
-                decompressedText.append(((LeafNode) currentNode).getValue());
-                if (decompressedText.length() == originalFileSize) {
-                    break; // Se alcanzó el tamaño original del archivo, salir del bucle
-                }
-                currentNode = treeHead; // Reiniciar desde la raíz del árbol
-            }
         }
 
-        return decompressedText;
+        return decompressedText.toString();
     }
 
 
@@ -229,20 +227,6 @@ public class Huffman {
 
         // The last remaining element of the queue is the head of the created tree
         return list.poll();
-    }
-
-    /**
-     * Method that given the name of a file with the extension, returns the name of the file without the extension
-     * @param nombreArchivo, the name of the archive with the extension
-     * @return the name of the archive without the extension
-     */
-    private static String obtenerNombreSinExtension(String nombreArchivo) {
-        // This method will probably be eliminated, since it has no need to be used. It will stick around for now.
-        int indicePunto = nombreArchivo.lastIndexOf(".");
-        if (indicePunto != -1) {
-            return nombreArchivo.substring(0, indicePunto);
-        }
-        return nombreArchivo;
     }
 
 }
