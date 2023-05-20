@@ -109,7 +109,7 @@ public class Huffman {
     public File decompressFile(CompressedFile compressedFile) throws IOException {
         // Debe de recibir un compressedFile, y utilizar la info dentro del CompressedFile para retornar el archivo.
 
-        File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
+        /*File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
 
         FileInputStream fileInputStream = new FileInputStream(compressedFile);
         GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
@@ -124,7 +124,8 @@ public class Huffman {
         gzipInputStream.close();
         fileInputStream.close();
 
-        return outputFile;
+        return outputFile;*/
+        return null;
     }
 
     /**
