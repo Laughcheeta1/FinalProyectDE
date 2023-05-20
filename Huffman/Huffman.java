@@ -6,10 +6,9 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.util.zip.InflaterInputStream;
+import java.io.File;
+import java.io.FileWriter;
+
 
 /**
  * Santiago Yepes Mesa, Simon Eduardo Parisca Muñoz, Santiago Augusto Toro Bonilla
@@ -111,41 +110,65 @@ public class Huffman {
      * @return text contained in the compressedFile
      */
     public String decompressFile(CompressedFile compressedFile) throws IOException {
-        /*
-        File outputFile = new File(compressedFile.getParent(), getFileNameWithoutExtension(compressedFile) + ".txt");
+        Node treeHead = compressedFile.getTreeHead();
+        BitSet encoding = compressedFile.getEncoding();
+        int originalFileSize = compressedFile.getOriginalFileSize();
 
-        InputStream inputStream = Files.newInputStream(compressedFile.getPath());
-        InflaterInputStream inflaterInputStream = new InflaterInputStream(inputStream);
-        OutputStream outputStream = Files.newOutputStream(outputFile.toPath());
+        // Obtener la secuencia de bits comprimidos del BitSet
+        ArrayList<Boolean> encodingBooleanVersion = bitSetToArrayList(encoding);
 
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = inflaterInputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, bytesRead);
-        }
+        // Descomprimir la secuencia de bits utilizando el árbol de Huffman
+        StringBuilder decompressedText = decodeText(treeHead, encodingBooleanVersion, originalFileSize);
 
-        outputStream.close();
-        inflaterInputStream.close();
-        inputStream.close();
-
-        return outputFile;*/
-        return null;
+        return decompressedText.toString();
     }
 
     /**
-     * Obtiene el nombre de archivo sin la extensión.
+     *Given bitset version of the ArrayList a boolean ArrayList, return a boolean ArrayList
      *
-     * @param file El archivo del cual se desea obtener el nombre sin extensión.
-     * @return El nombre del archivo sin la extensión.
+     * @param bitSet el BitSet a convertir
+     * @return la lista de booleanos correspondiente al BitSet
      */
-    private String getFileNameWithoutExtension(CompressedFile file) {
-        String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex > 0) {
-            return fileName.substring(0, dotIndex);
+    private ArrayList<Boolean> bitSetToArrayList(BitSet bitSet) {
+        ArrayList<Boolean> booleanList = new ArrayList<>();
+        for (int i = 0; i < bitSet.length(); i++) {
+            booleanList.add(bitSet.get(i));
         }
-        return fileName;
+        return booleanList;
     }
+
+    /**
+     * Decodifica la secuencia de bits utilizando el árbol de Huffman y devuelve el texto descomprimido.
+     *
+     * @param treeHead          la raíz del árbol de Huffman
+     * @param encoding          la secuencia de bits comprimidos
+     * @param originalFileSize  el tamaño original del archivo antes de la compresión
+     * @return el texto descomprimido
+     */
+    private StringBuilder decodeText(Node treeHead, ArrayList<Boolean> encoding, int originalFileSize) {
+        StringBuilder decompressedText = new StringBuilder();
+        Node currentNode = treeHead;
+
+        for (boolean bit : encoding) {
+            if (bit) {
+                currentNode = currentNode.getRightNode();
+            } else {
+                currentNode = currentNode.getLeftNode();
+            }
+
+            if (currentNode instanceof LeafNode) {
+                decompressedText.append(((LeafNode) currentNode).getValue());
+                if (decompressedText.length() == originalFileSize) {
+                    break; // Se alcanzó el tamaño original del archivo, salir del bucle
+                }
+                currentNode = treeHead; // Reiniciar desde la raíz del árbol
+            }
+        }
+
+        return decompressedText;
+    }
+
+
 
     /**
      * Given a file returns the count of the characters in form of a hashmap, where its key is the
