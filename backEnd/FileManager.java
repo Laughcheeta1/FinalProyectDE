@@ -1,13 +1,31 @@
 package backEnd;
 
-
+import Huffman.CompressedFile;
+import java.io.File;
 
 /**
  * En esta clase es donde se leen y se escriben los archivos.
  */
 public class FileManager {
-    // writeCompressedFile
-    // readCompressedFile
-    // read.txtFile
-    // write.txtFile
+    public static File readTxt(String memoryDirection)
+    {
+
+    }
+
+    public static void writeText(String memoryDirection, String text, String fileName)
+    {
+
+    }
+
+    public static CompressedFile readCompressedFile(String memoryDirection)
+    {
+
+    }
+
+    public static void writeCompressedFile(String memoryDirection, CompressedFile compressedFile, String fileName)
+    {
+
+    }
+
+
 }

@@ -1,5 +1,8 @@
 package backEnd;
 
+import Huffman.CompressedFile;
+import Huffman.Huffman;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,18 +37,18 @@ public class FileViewerBackEnd {
 
 	/**
 	 * Given the location of a file, returns the contents of the file as a String
-	 * @param archivo, location of the file
+	 * @param direccionArchivo, location of the file
 	 * @return File Content
 	 * @throws IOException
 	 */
-	public static String readFile(String archivo) throws IOException {
-		File file = new File(archivo);
+	public static String readFile(String direccionArchivo) throws IOException {
+		File file = FileManager.readTxt(direccionArchivo);
 		FileReader fr = new FileReader(file);
 		BufferedReader b = new BufferedReader(fr);
 		String linea;
 		String lectura = "";
 		while ((linea = b.readLine()) != null) {
-			lectura = lectura + linea + "\n";
+			lectura = lectura.concat(linea); //.concat("\n");
 		}
 		b.close();
 		fr.close();
@@ -57,34 +60,27 @@ public class FileViewerBackEnd {
 	 * @throws IOException
 	 */
 	public static void save() throws IOException {
-		File file = new File(downloadsPath().toString()); //Se crea el archivo en Descargas
+		File file = new File(downloadsPath().toString()); // Se crea el archivo en Descargas
 		//método para leer archivo
 		Desktop.getDesktop().open(file); //Se abre el archivo
 	}
 
 	public static boolean isFileCompressed(String filePath) { // Ingresa la dirección o ruta del archivo
-		File file = new File(filePath);
-		String extension = getFileExtension(file.getName());
-		if (extension.equalsIgnoreCase("compr"))
-			return true;
-		else
-			return false;
+		return filePath.endsWith(".compr");
 	}
 
-	private static String getFileExtension(String fileName) {
-		int Index = fileName.lastIndexOf(".");
-		if (Index == -1 || Index == fileName.length() - 1) {
-	        	/* Se verifica si el Indice es -1 o si el punto está al final del archivo para comprobar
-	        		que la extensión sea valida, si es invalida retorna ("") */
-			return "";
+
+	public static String decompressFile(String memoryDirection) throws FileExtensionException
+	{
+		if (!isFileCompressed(memoryDirection))
+		{
+			throw new FileExtensionException();
 		}
-		return fileName.substring(Index + 1); /* Se implementa para retornar la subcadena que se
-		     											encuentra despues del punto */
+
+		return Huffman.decompressFile(FileManager.readCompressedFile(memoryDirection));
 	}
 
-	// main method  · Susana Uribe
-	public static void main(String[] args) throws IOException {
-		String textForPath=downloadsPath().toString(); //We use this automatically in the space for the path
-
+	public static CompressedFile compressFile(File file) throws IOException {
+		return Huffman.compressTxt(file);
 	}
 }
