@@ -1,5 +1,7 @@
 package backEnd;
 
+import Huffman.CompressedFile;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,14 +40,14 @@ public class FileViewerBackEnd {
 	 * @return File Content
 	 * @throws IOException
 	 */
-	public static String readFile(String archivo) throws IOException {
-		File file = new File(archivo);
+	public static String readFile(String direccionArchivo) throws IOException {
+		File file = FileManager.readTxt(direccionArchivo);
 		FileReader fr = new FileReader(file);
 		BufferedReader b = new BufferedReader(fr);
 		String linea;
 		String lectura = "";
 		while ((linea = b.readLine()) != null) {
-			lectura = lectura + linea + "\n";
+			lectura = lectura.concat(linea); //.concat("\n");
 		}
 		b.close();
 		fr.close();
@@ -57,34 +59,33 @@ public class FileViewerBackEnd {
 	 * @throws IOException
 	 */
 	public static void save() throws IOException {
-		File file = new File(downloadsPath().toString()); //Se crea el archivo en Descargas
+		File file = new File(downloadsPath().toString()); // Se crea el archivo en Descargas
 		//método para leer archivo
 		Desktop.getDesktop().open(file); //Se abre el archivo
 	}
 
 	public static boolean isFileCompressed(String filePath) { // Ingresa la dirección o ruta del archivo
 		File file = new File(filePath);
-		String extension = getFileExtension(file.getName());
-		if (extension.equalsIgnoreCase("compr"))
-			return true;
-		else
-			return false;
+		return file.getName().endsWith(".compr");
 	}
 
-	private static String getFileExtension(String fileName) {
-		int Index = fileName.lastIndexOf(".");
-		if (Index == -1 || Index == fileName.length() - 1) {
-	        	/* Se verifica si el Indice es -1 o si el punto está al final del archivo para comprobar
-	        		que la extensión sea valida, si es invalida retorna ("") */
-			return "";
-		}
-		return fileName.substring(Index + 1); /* Se implementa para retornar la subcadena que se
-		     											encuentra despues del punto */
+	/**
+	 * Saves a Txt file containing the given text to the specified place in memory
+	 * @param path
+	 * @param text
+	 */
+	public static void saveTxtFile(String path, String text)
+	{
+		FileManager.writeText(path, text);
 	}
 
-	// main method  · Susana Uribe
-	public static void main(String[] args) throws IOException {
-		String textForPath=downloadsPath().toString(); //We use this automatically in the space for the path
-
+	/**
+	 * Saves a CompreseedFile object to the specified place in memory
+	 * @param path
+	 * @param compressedFile
+	 */
+	public static void saveCompressedFile(String path, CompressedFile compressedFile)
+	{
+		FileManager.writeCompressedFile(path, compressedFile);
 	}
 }
