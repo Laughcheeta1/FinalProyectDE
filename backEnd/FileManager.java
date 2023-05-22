@@ -12,7 +12,7 @@ public class FileManager {
 
     }
 
-    public static void writeText(String memoryDirection, String text)
+    public static void writeText(String memoryDirection, String text, String fileName)
     {
 
     }
@@ -22,7 +22,7 @@ public class FileManager {
 
     }
 
-    public static void writeCompressedFile(String memoryDirection, CompressedFile compressedFile)
+    public static void writeCompressedFile(String memoryDirection, CompressedFile compressedFile, String fileName)
     {
 
     }

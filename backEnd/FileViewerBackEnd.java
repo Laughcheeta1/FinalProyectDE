@@ -1,6 +1,7 @@
 package backEnd;
 
 import Huffman.CompressedFile;
+import Huffman.Huffman;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -36,7 +37,7 @@ public class FileViewerBackEnd {
 
 	/**
 	 * Given the location of a file, returns the contents of the file as a String
-	 * @param archivo, location of the file
+	 * @param direccionArchivo, location of the file
 	 * @return File Content
 	 * @throws IOException
 	 */
@@ -65,27 +66,21 @@ public class FileViewerBackEnd {
 	}
 
 	public static boolean isFileCompressed(String filePath) { // Ingresa la dirección o ruta del archivo
-		File file = new File(filePath);
-		return file.getName().endsWith(".compr");
+		return filePath.endsWith(".compr");
 	}
 
-	/**
-	 * Saves a Txt file containing the given text to the specified place in memory
-	 * @param path
-	 * @param text
-	 */
-	public static void saveTxtFile(String path, String text)
+
+	public static String decompressFile(String memoryDirection) throws FileExtensionException
 	{
-		FileManager.writeText(path, text);
+		if (!isFileCompressed(memoryDirection))
+		{
+			throw new FileExtensionException();
+		}
+
+		return Huffman.decompressFile(FileManager.readCompressedFile(memoryDirection));
 	}
 
-	/**
-	 * Saves a CompreseedFile object to the specified place in memory
-	 * @param path
-	 * @param compressedFile
-	 */
-	public static void saveCompressedFile(String path, CompressedFile compressedFile)
-	{
-		FileManager.writeCompressedFile(path, compressedFile);
+	public static CompressedFile compressFile(File file) throws IOException {
+		return Huffman.compressTxt(file);
 	}
 }
