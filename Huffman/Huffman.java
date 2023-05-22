@@ -20,7 +20,7 @@ public class Huffman {
      * @param file to compress
      * @return CompressedFile object.
      */
-    public CompressedFile compressTxt(File file) throws IOException
+    public static CompressedFile compressTxt(File file) throws IOException
     {
         Node treeHead = createHuffmanTree(countCharacters(file));
         // Need this variable in order to save the amount of bits we are using
@@ -37,7 +37,7 @@ public class Huffman {
      * @return The encoded version of the text, in the form of a bitset
      * @throws IOException - if the file does not exist
      */
-    private ArrayList<Boolean> getEncodedText(Node treeHead, File file) throws IOException {
+    private static ArrayList<Boolean> getEncodedText(Node treeHead, File file) throws IOException {
         ArrayList<Boolean> code = new ArrayList<>(); // Stores an array of booleans that later will become bits
         HashMap<Character, ArrayList<Boolean>> bitsets = generateCode(treeHead); // Get the code for each char in text
 
@@ -58,7 +58,7 @@ public class Huffman {
      * @param code - Arraylist to convert
      * @return The bitset version
      */
-    private BitSet arrayListToBitSet(ArrayList<Boolean> code) {
+    private static BitSet arrayListToBitSet(ArrayList<Boolean> code) {
         int x = code.size();
         // Give the BitSet the amount of bits we are going to use, so it allocates the necessary memory
         BitSet bitset = new BitSet(x);
@@ -77,7 +77,7 @@ public class Huffman {
      * @param head - head of the Huffman tree
      * @return The encoded version of a given Character
      */
-    private HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
+    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
         HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
         ArrayList<Boolean> actual = new ArrayList<>();
 
@@ -92,7 +92,7 @@ public class Huffman {
      * @param bitsets - the HashMap that stores the codes
      * @return HashMap that has all the codes
      */
-    private HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
+    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
         if (node instanceof LeafNode) {
             // If we get to a leaf node, we can stop generating the code, and assign the char contained in the leaf
                 // node, its code.
@@ -117,7 +117,7 @@ public class Huffman {
      * @param compressedFile - An CompressedFile object, that contains the desired text to decompress
      * @return decompressed text, in form of a String, contained in the compressedFile
      */
-    public String decompressFile(CompressedFile compressedFile) {
+    public static String decompressFile(CompressedFile compressedFile) {
         Node treeHead = compressedFile.treeHead();
         BitSet encoding = compressedFile.encoding();
         int sizeOfTheCode = compressedFile.sizeOfTheCode();
@@ -133,7 +133,7 @@ public class Huffman {
      * @param sizeOfTheCode - the amount of bits that compose the encoded message
      * @return the decompressed text in a String form
      */
-    private String decodeText(Node treeHead, BitSet encoding, int sizeOfTheCode) {
+    private static String decodeText(Node treeHead, BitSet encoding, int sizeOfTheCode) {
         StringBuilder decompressedText = new StringBuilder();
         Node currentNode = treeHead; // We start the decoding in the Tree head
 
@@ -166,7 +166,7 @@ public class Huffman {
      * @param file - File to count the number of characters
      * @return HashMap that contains the number of chars
      */
-    private HashMap<Character, Integer> countCharacters(File file) throws IOException
+    private static HashMap<Character, Integer> countCharacters(File file) throws IOException
     {
         // Create the needed resources
         HashMap<Character, Integer> count = new HashMap<>();
@@ -194,7 +194,7 @@ public class Huffman {
      * @param frequencies - HashMap containing the frequency of the characters
      * @return Head node of the tree
      */
-    private Node createHuffmanTree(HashMap<Character, Integer> frequencies)
+    private static Node createHuffmanTree(HashMap<Character, Integer> frequencies)
     {
         // Creates a priority queue that will always have first the nodes that stores the lower values (because of the
             // compare to of the class Node)
