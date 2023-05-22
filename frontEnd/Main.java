@@ -241,6 +241,7 @@ public class Main extends JFrame {
 //	                File file = new File(selectedFile.getAbsolutePath());
 //	                String fileName = file.getName();
 	                panel2.txtPath.setText(fileSelected);
+	                //Se necesita guardar el nombre del file para el fichero
 	            } else {
 	            	fileSelected = null;
 	            }
