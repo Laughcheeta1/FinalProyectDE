@@ -45,20 +45,20 @@ public class panelInicio extends JPanel {
 		btnComprimir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnComprimir.setBackground(new Color(33, 210, 29));
 		btnComprimir.setFont(new Font("Verdana", Font.BOLD, 22));
-		btnComprimir.setBounds(200, 150, 300, 90);
+		btnComprimir.setBounds(200, 180, 300, 90);
 		add(btnComprimir);
 		
 		btnDescomp = new JButton("Descomprimir");
 		btnDescomp.setFont(new Font("Verdana", Font.BOLD, 22));
 		btnDescomp.setBackground(new Color(20, 100, 255));
-		btnDescomp.setBounds(200, 315, 300, 90);
+		btnDescomp.setBounds(200, 450, 300, 90);
 		add(btnDescomp);
 		
-		btnHistorial = new JButton("Historial");
-		btnHistorial.setFont(new Font("Verdana", Font.BOLD, 22));
-		btnHistorial.setBackground(new Color(250, 255, 23));
-		btnHistorial.setBounds(200, 480, 300, 90);
-		add(btnHistorial);
+//		btnHistorial = new JButton("Historial");
+//		btnHistorial.setFont(new Font("Verdana", Font.BOLD, 22));
+//		btnHistorial.setBackground(new Color(250, 255, 23));
+//		btnHistorial.setBounds(200, 480, 300, 90);
+//		add(btnHistorial);
 
 	}
 }
