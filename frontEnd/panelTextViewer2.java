@@ -2,31 +2,29 @@ package frontEnd;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-public class panelTextViewer1 extends JPanel {
+public class panelTextViewer2 extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	
 	JTextArea textFileViewer;
 	JLabel lblTituloText;
 	JButton btnExplorador;
 	JTextArea textMemorySelected;
 	
 	JLabel btnVolver;
-	JLabel btnComprimir;
+	JLabel btnDescomprimir;
 	
-	public panelTextViewer1() {
-		
+	public panelTextViewer2() {
 		setBackground(new Color(242, 242, 242));
 		setBounds(0, 0, 1200, 720);
 		setLayout(null);
@@ -85,14 +83,14 @@ public class panelTextViewer1 extends JPanel {
 		btnVolver.setBounds(664, 484, 200, 50);
 		add(btnVolver);
 		
-		btnComprimir = new JLabel("");
-		btnComprimir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnComprimir.setIcon(new ImageIcon(panelComprimir.class.getResource("/imagenes/comprimir.png")));
-		btnComprimir.setFont(new Font("Verdana", Font.BOLD, 20));
-		btnComprimir.setHorizontalAlignment(SwingConstants.CENTER);
-		btnComprimir.setForeground(new Color(255, 0, 0));
-		btnComprimir.setBounds(924, 484, 200, 50);
-		add(btnComprimir);
+		btnDescomprimir = new JLabel("");
+		btnDescomprimir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnDescomprimir.setIcon(new ImageIcon(panelComprimir.class.getResource("/imagenes/guardar.png")));
+		btnDescomprimir.setFont(new Font("Verdana", Font.BOLD, 20));
+		btnDescomprimir.setHorizontalAlignment(SwingConstants.CENTER);
+		btnDescomprimir.setForeground(new Color(255, 0, 0));
+		btnDescomprimir.setBounds(924, 484, 200, 50);
+		add(btnDescomprimir);
 
 	}
 	
@@ -101,4 +99,5 @@ public class panelTextViewer1 extends JPanel {
 		lblTituloText.setText("");
 		textMemorySelected.setText("");
 	}
+
 }

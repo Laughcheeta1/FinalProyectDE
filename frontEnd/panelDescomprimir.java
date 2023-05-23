@@ -2,34 +2,34 @@ package frontEnd;
 
 import java.awt.Color;
 import java.awt.Cursor;
-
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
-public class panelComprimir extends JPanel {
+public class panelDescomprimir extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
+	
 	JLabel btnVolver;
 	JLabel btnRevisar;
 	JButton btnExplorador;
 	JPanel panelArchivoSelected;
 	JTextArea txtPath;
 	
-	public panelComprimir() {
+	public panelDescomprimir() {
 		
 		setBackground(new Color(242, 242, 242));
 		setBounds(0, 0, 1200, 720);
 		setLayout(null);
 		
-		JLabel lblSelecciona = new JLabel("Suelte el archivo a comprimir");
+		JLabel lblSelecciona = new JLabel("Suelte el archivo a descomprimir");
 		lblSelecciona.setFont(new Font("Verdana", Font.BOLD, 24));
 		lblSelecciona.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSelecciona.setBounds(40, 383, 515, 150);
@@ -87,4 +87,5 @@ public class panelComprimir extends JPanel {
 		txtPath.setText("");
 		
 	}
+
 }
