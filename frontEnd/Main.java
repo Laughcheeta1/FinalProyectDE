@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -26,6 +27,10 @@ import javax.swing.SwingConstants;
 import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Huffman.CompressedFile;
+import backEnd.FileViewerBackEnd;
+import backEnd.FileManager;
 
 public class Main extends JFrame {
 
@@ -53,6 +58,9 @@ public class Main extends JFrame {
 	int xMouse, yMouse;
 	JPanel header;
 	String fileSelected;
+	String fileSelectedName;
+	String memorySelected;
+	File fileToCompress;
 	panelInicio panelInicio = new panelInicio();
 	panelComprimir panel2 = new panelComprimir();
 	panelTextViewer1 panel3 = new panelTextViewer1();
@@ -161,6 +169,9 @@ public class Main extends JFrame {
 				contentPane.add(header);
 				contentPane.add(panel2);
 				fileSelected = null;
+				fileSelectedName = null;
+				memorySelected = null;
+				fileToCompress = null;
 			}
 		});
 		
@@ -214,9 +225,19 @@ public class Main extends JFrame {
 				if(fileSelected == null) {
 					JOptionPane.showMessageDialog(panel2, "Debes seleccionar un archivo primero");
 				}
-				else {					
-					toTextViewer(panel2, panel3);
-					panel2.limpiarCasillas();
+				else {	
+					
+					try {
+						String textTofill = FileViewerBackEnd.readFile(fileSelected);
+						panel3.textFileViewer.setText(textTofill);
+						panel3.lblTituloText.setText(fileSelectedName);
+						memorySelected = null;
+						toTextViewer(panel2, panel3);
+						panel2.limpiarCasillas();
+					}
+					catch(IOException err) {
+						JOptionPane.showMessageDialog(panel2, err.getMessage());
+					}
 				}
 			}
 		});
@@ -236,15 +257,68 @@ public class Main extends JFrame {
 	            if (result == JFileChooser.APPROVE_OPTION) {
 	                // Obtener el archivo seleccionado
 	                File selectedFile = fileChooser.getSelectedFile();
-	                fileSelected = selectedFile.getAbsolutePath();
 	                
-//	                File file = new File(selectedFile.getAbsolutePath());
-//	                String fileName = file.getName();
+	                fileSelected = selectedFile.getAbsolutePath();
+	                fileSelectedName = selectedFile.getName();
+	                fileToCompress = new File(selectedFile.getAbsolutePath());
+	                
 	                panel2.txtPath.setText(fileSelected);
-	                //Se necesita guardar el nombre del file para el fichero
 	            } else {
 	            	fileSelected = null;
 	            }
+			}
+		});
+		
+		panel3.btnExplorador.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Seleccione una carpeta");
+		        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		        int returnValue = fileChooser.showOpenDialog(null);
+	            
+	            if (returnValue == JFileChooser.APPROVE_OPTION) {
+	                // Obtener el archivo seleccionado
+//	            	String selectedPath = fileChooser.getSelectedFile().getPath();
+	                File selectedFile = fileChooser.getSelectedFile();
+	                memorySelected = selectedFile.getAbsolutePath();
+//	                File file = new File(selectedFile.getAbsolutePath());
+//	                String fileName = file.getName();
+	                panel3.textMemorySelected.setText(memorySelected);
+	                //Se necesita guardar el nombre del file para el fichero
+	            } else {
+	            	memorySelected = null;
+	            }
+			}
+		});
+		
+		panel3.btnComprimir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if(memorySelected == null) {
+					JOptionPane.showMessageDialog(panel3, "Debes seleccionar un lugar en memoria");
+				}
+				else {
+					try {
+						CompressedFile filesito = FileViewerBackEnd.compressFile(fileToCompress);
+						FileManager.writeCompressedFile(memorySelected, filesito, fileSelectedName);
+						JOptionPane.showMessageDialog(panel3, "Archivo guardado");
+						panel3.limpiar();
+						toComprimir(panel3);
+					} catch (IOException err) {
+						JOptionPane.showMessageDialog(panel3, err.getMessage());
+					}
+				}
+			}
+		});
+		
+		panel3.btnVolver.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel3.limpiar();
+				toComprimir(panel3);
 			}
 		});
 		
@@ -255,8 +329,22 @@ public class Main extends JFrame {
 		panelInicio.setVisible(true);
 		anterior.setVisible(false);
 		header.setVisible(false);
+		fileSelected = null;
+		fileSelectedName = null;
+		memorySelected = null;
+		fileToCompress = null;
 		contentPane.add(panelInicio);
 		
+	}
+	
+	public void toComprimir(JPanel anterior) {
+		fileSelected = null;
+		fileSelectedName = null;
+		memorySelected = null;
+		fileToCompress = null;
+		panel2.setVisible(true);
+		anterior.setVisible(false);
+		contentPane.add(panel2);
 	}
 	
 	public void toTextViewer(JPanel anterior, JPanel nuevo) {

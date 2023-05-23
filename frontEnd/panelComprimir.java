@@ -30,7 +30,7 @@ public class panelComprimir extends JPanel {
 		setLayout(null);
 		
 		JLabel lblSelecciona = new JLabel("Suelte el archivo a comprimir");
-		lblSelecciona.setFont(new Font("Verdana", Font.BOLD, 28));
+		lblSelecciona.setFont(new Font("Verdana", Font.BOLD, 24));
 		lblSelecciona.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSelecciona.setBounds(40, 383, 515, 150);
 		add(lblSelecciona);
