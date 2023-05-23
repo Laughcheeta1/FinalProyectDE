@@ -70,12 +70,7 @@ public class FileViewerBackEnd {
 	}
 
 
-	public static String decompressFile(String memoryDirection) throws FileExtensionException, IOException, ClassNotFoundException {
-		if (!isFileCompressed(memoryDirection))
-		{
-			throw new FileExtensionException();
-		}
-
+	public static String decompressFile(String memoryDirection) throws IOException, ClassNotFoundException {
 		return Huffman.decompressFile(FileManager.readCompressedFile(memoryDirection));
 	}
 
