@@ -4,9 +4,18 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.File;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -54,9 +63,9 @@ public class panelComprimir extends JPanel {
 		add(panelArchivoSelected);
 		panelArchivoSelected.setLayout(null);
 		
+		
 		txtPath = new JTextArea();
 		txtPath.setFont(new Font("Monospaced", Font.BOLD | Font.ITALIC, 24));
-//		txtPath.setText("some");
 		txtPath.setBounds(10, 5, 460, 390);
 		txtPath.setLineWrap(true);
 		txtPath.setWrapStyleWord(true);

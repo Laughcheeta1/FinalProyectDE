@@ -10,6 +10,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.TransferHandler;
 import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -215,30 +217,6 @@ public class Main extends JFrame {
 				auxText = null;
 			}
 		});
-		
-//		panelInicio.btnHistorial.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//				panelInicio.btnHistorial.setBackground(new Color(113, 113, 113));
-//				panelInicio.btnHistorial.setForeground(new Color(255, 255, 255));
-//			}
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				panelInicio.btnHistorial.setBackground(new Color(250, 255, 23));
-//				panelInicio.btnHistorial.setForeground(new Color(0, 0, 0));
-//			}
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				panelInicio.btnHistorial.setBackground(new Color(250, 255, 23));
-//				panelInicio.btnHistorial.setForeground(new Color(0, 0, 0));
-//				header.add(titulo);				
-//				header.setVisible(true);
-//				panel4.setVisible(true);
-//				panelInicio.setVisible(false);
-//				contentPane.add(header);
-//				contentPane.add(panelH);
-//			}
-//		});
 		
 		panel2.btnVolver.addMouseListener(new MouseAdapter() {
 			@Override
@@ -467,6 +445,159 @@ public class Main extends JFrame {
 			}
 		});
 		
+		
+		DropTarget dropTarget = new DropTarget(panel2.txtPath, new DropTargetAdapter() {
+            @Override
+            public void drop(DropTargetDropEvent event) {
+                event.acceptDrop(DnDConstants.ACTION_COPY);
+                Transferable transferable = event.getTransferable();
+
+                if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                        // Aquí puedes procesar los archivos
+                        for (File file : fileList) {
+                            // Realiza las operaciones necesarias con cada archivo
+                            // Por ejemplo, obtener datos o realizar acciones específicas
+                        	String extension = getFileExtension(file);
+                            if (extension != null && extension.equalsIgnoreCase("txt")) {
+                            	fileSelected = file.getAbsolutePath();
+            	                fileSelectedName = file.getName();
+            	                fileToCompress = new File(file.getAbsolutePath());
+            	                
+            	                panel2.txtPath.setText(fileSelected);
+                            }
+                            else {
+                            	JOptionPane.showMessageDialog(panel2, "Extension no soportada");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                event.dropComplete(true);
+            }
+        });
+		panel2.txtPath.setDropTarget(dropTarget);
+		
+		panel2.txtPath.setTransferHandler(new TransferHandler() {
+            @Override
+            public boolean canImport(TransferSupport support) {
+                return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                if (!canImport(support)) {
+                    return false;
+                }
+
+                Transferable transferable = support.getTransferable();
+                try {
+                    List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    // Aquí puedes procesar los archivos
+                    for (File file : fileList) {
+                        // Realiza las operaciones necesarias con cada archivo
+                        // Por ejemplo, obtener datos o realizar acciones específicas
+                    	String extension = getFileExtension(file);
+                        if (extension != null && extension.equalsIgnoreCase("txt")) {
+                        	fileSelected = file.getAbsolutePath();
+        	                fileSelectedName = file.getName();
+        	                fileToCompress = new File(file.getAbsolutePath());
+        	                
+        	                panel2.txtPath.setText(fileSelected);
+                        }
+                        else {
+                        	JOptionPane.showMessageDialog(panel2, "Extension no soportada");
+                        }
+                    }
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+        });
+		
+		DropTarget dropTarget2 = new DropTarget(panel4.txtPath, new DropTargetAdapter() {
+            @Override
+            public void drop(DropTargetDropEvent event) {
+                event.acceptDrop(DnDConstants.ACTION_COPY);
+                Transferable transferable = event.getTransferable();
+
+                if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                        // Aquí puedes procesar los archivos
+                        for (File file : fileList) {
+                            // Realiza las operaciones necesarias con cada archivo
+                            // Por ejemplo, obtener datos o realizar acciones específicas
+                        	String extension = getFileExtension(file);
+                            if (extension != null && extension.equalsIgnoreCase("comp")) {
+                            	fileSelected2 = file.getAbsolutePath();
+            	                fileSelectedName2 = file.getName();
+            	                fileToCompress2 = new File(file.getAbsolutePath());
+            	                
+            	                panel4.txtPath.setText(fileSelected2);
+                            }
+                            else {
+                            	JOptionPane.showMessageDialog(panel2, "Extension no soportada");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                event.dropComplete(true);
+            }
+        });
+		panel4.txtPath.setDropTarget(dropTarget2);
+		
+		panel4.txtPath.setTransferHandler(new TransferHandler() {
+            @Override
+            public boolean canImport(TransferSupport support) {
+                return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                if (!canImport(support)) {
+                    return false;
+                }
+
+                Transferable transferable = support.getTransferable();
+                try {
+                    List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    // Aquí puedes procesar los archivos
+                    for (File file : fileList) {
+                        // Realiza las operaciones necesarias con cada archivo
+                        // Por ejemplo, obtener datos o realizar acciones específicas
+                    	String extension = getFileExtension(file);
+                        if (extension != null && extension.equalsIgnoreCase("comp")) {
+        	                fileSelected2 = file.getAbsolutePath();
+        	                fileSelectedName2 = file.getName();
+        	                fileToCompress2 = new File(file.getAbsolutePath());
+        	                
+        	                panel4.txtPath.setText(fileSelected2);
+                        }
+                        else {
+                        	JOptionPane.showMessageDialog(panel4, "Extension no soportada");
+                        }
+                    }
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+        });
+		
+		
+		
 		contentPane.add(panelInicio);
 	}
 	
@@ -514,44 +645,14 @@ public class Main extends JFrame {
 		contentPane.add(nuevo);
 	}
 	
-	public void cargarHistoriales() {
-		//Hay que modificar los atributoos de los labels para el estilo
-		//Hay que modificar la coordenada para que cuadre
-		//Hay que crear los subPaneles de compirmidos y descomp
-		//Hay que hacer el for de descomp
-		
-//		Historial[] historialesComp = Historial.getComprimidos();
-//		int coordenada = 40;
-//		Label labelNombreFile;
-//		Label labelTamaño;
-		
-//		for(Historial i : historialesComp) {
-//			
-//			labelNombreFile = new Label(i.getNombre);
-//			labelNombreFile.setForeground(new Color(255, 255, 255));
-//			labelNombreFile.setFont(new Font("Verdana", Font.PLAIN, 12));
-//			labelNombreFile.setBounds(41, coordenada, 119, 30);
-//			labelNombreFile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//			panelH.panelComprimidos.add(labelNombreFile);
-//			
-//			labelNombreFile.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseClicked(MouseEvent e) {
-//					auxTexto = i.getText();
-//					goTopanelArchiveViewerHistorial(panelH);
-		
-//				}
-//			});
-//			
-//			labelTamaño = new Label(i.getTamano());
-//			labelTamaño.setForeground(Color.WHITE);
-//			labelTamaño.setFont(new Font("Verdana", Font.PLAIN, 12));
-//			labelTamaño.setBounds(161, coordenada, 313, 30);
-//			panelH.panelDescomp.add(labelTamaño);
-//			
-//			coordenada += 30;
-//		}
-	}
+	private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1).toLowerCase();
+        }
+        return null;
+    }
 
 }
 

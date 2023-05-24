@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,6 +41,12 @@ public class panelInicio extends JPanel {
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		titulo.setBounds(0, 0, 450, 300);
 		panelsitoDecoration.add(titulo);
+		
+		JLabel lblImagen = new JLabel("");
+		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImagen.setIcon(new ImageIcon(panelInicio.class.getResource("/imagenes/huffman_arbol.png")));
+		lblImagen.setBounds(75, 300, 300, 290);
+		panelsitoDecoration.add(lblImagen);
 		
 		btnComprimir = new JButton("Comprimir");
 		btnComprimir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
