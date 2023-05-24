@@ -40,5 +40,16 @@ public class FileManager {
         f.close();
     }
 
+    public static String removeExtension(String fileName) throws FileExtensionException
+    {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex == -1)
+        {
+            throw new FileExtensionException();
+        }
 
+        StringBuilder name = new StringBuilder(fileName);
+        name.replace(dotIndex, fileName.length(), "");
+        return name.toString();
+    }
 }

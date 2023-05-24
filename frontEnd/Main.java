@@ -266,10 +266,17 @@ public class Main extends JFrame {
 	                File selectedFile = fileChooser.getSelectedFile();
 	                
 	                fileSelected = selectedFile.getAbsolutePath();
-	                fileSelectedName = selectedFile.getName();
-	                fileToCompress = new File(selectedFile.getAbsolutePath());
-	                
-	                panel2.txtPath.setText(fileSelected);
+					try
+					{
+						fileSelectedName = FileManager.removeExtension(selectedFile.getName());
+						fileToCompress = new File(selectedFile.getAbsolutePath());
+
+						panel2.txtPath.setText(fileSelected);
+					}
+	                catch (FileExtensionException err)
+					{
+						JOptionPane.showMessageDialog(panel4, err.getMessage());
+					}
 	            } else {
 	            	fileSelected = null;
 	            }

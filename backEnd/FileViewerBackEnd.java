@@ -48,7 +48,7 @@ public class FileViewerBackEnd {
 		String linea;
 		String lectura = "";
 		while ((linea = b.readLine()) != null) {
-			lectura = lectura.concat(linea); //.concat("\n");
+			lectura = lectura.concat(linea).concat("\n");
 		}
 		b.close();
 		fr.close();
