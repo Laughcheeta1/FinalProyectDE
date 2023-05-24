@@ -14,7 +14,7 @@ public class FileManager {
     }
 
     public static void writeText(String memoryDirection, String text, String fileName) throws IOException {
-        String filePath = memoryDirection + File.separator + fileName + "." + "comp";
+        String filePath = memoryDirection + File.separator + fileName + "." + "txt";
         File f = new File(filePath);
         BufferedWriter w = new BufferedWriter(new FileWriter(f));
         w.write(text);
@@ -40,8 +40,8 @@ public class FileManager {
         f.close();
     }
 
-    public static String removeExtension(String fileName) throws FileExtensionException
-    {
+    public static String removeExtension(String fileName)
+    {/*
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex == -1)
         {
@@ -51,5 +51,7 @@ public class FileManager {
         StringBuilder name = new StringBuilder(fileName);
         name.replace(dotIndex, fileName.length(), "");
         return name.toString();
+        */
+        return fileName.substring(0, fileName.lastIndexOf('.'));
     }
 }

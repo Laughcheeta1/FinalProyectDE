@@ -1,11 +1,9 @@
 package frontEnd;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Label;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -19,17 +17,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -266,17 +260,10 @@ public class Main extends JFrame {
 	                File selectedFile = fileChooser.getSelectedFile();
 	                
 	                fileSelected = selectedFile.getAbsolutePath();
-					try
-					{
-						fileSelectedName = FileManager.removeExtension(selectedFile.getName());
-						fileToCompress = new File(selectedFile.getAbsolutePath());
+					fileSelectedName = FileManager.removeExtension(selectedFile.getName());
+					fileToCompress = new File(selectedFile.getAbsolutePath());
 
-						panel2.txtPath.setText(fileSelected);
-					}
-	                catch (FileExtensionException err)
-					{
-						JOptionPane.showMessageDialog(panel4, err.getMessage());
-					}
+					panel2.txtPath.setText(fileSelected);
 	            } else {
 	            	fileSelected = null;
 	            }
@@ -362,9 +349,7 @@ public class Main extends JFrame {
 						toTextViewer(panel4, panel5);
 						panel4.limpiarCasillas();
 					}
-					catch(IOException err) {
-						JOptionPane.showMessageDialog(panel4, err.getMessage());
-					} catch(ClassNotFoundException err) {
+					catch(IOException | ClassNotFoundException err) {
 						JOptionPane.showMessageDialog(panel4, err.getMessage());
 					}
 				}
@@ -388,11 +373,11 @@ public class Main extends JFrame {
 	                File selectedFile = fileChooser.getSelectedFile();
 	                
 	                fileSelected2 = selectedFile.getAbsolutePath();
-	                fileSelectedName2 = selectedFile.getName();
-	                fileToCompress2 = new File(selectedFile.getAbsolutePath());
-	                
-	                panel4.txtPath.setText(fileSelected2);
-	            } else {
+					fileSelectedName2 = FileManager.removeExtension(selectedFile.getName());
+					fileToCompress2 = new File(selectedFile.getAbsolutePath());
+
+					panel4.txtPath.setText(fileSelected2);
+				} else {
 	            	fileSelected2 = null;
 	            }
 			}
@@ -431,9 +416,7 @@ public class Main extends JFrame {
 				}
 				else {
 					try {
-						String newName = fileSelectedName2.substring(0, fileSelectedName2.indexOf("."));
-						newName += ".txt";
-						FileManager.writeText(memorySelected2,auxText ,newName);
+						FileManager.writeText(memorySelected2,auxText ,fileSelectedName2);
 						JOptionPane.showMessageDialog(panel5, "Archivo guardado");
 						panel5.limpiar();
 						toDescomprimir(panel5);
