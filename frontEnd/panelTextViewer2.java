@@ -2,12 +2,14 @@ package frontEnd;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -31,7 +33,7 @@ public class panelTextViewer2 extends JPanel {
 		
 		JPanel panelTextViewer = new JPanel();
 		panelTextViewer.setBackground(new Color(255, 255, 255));
-		panelTextViewer.setBounds(50, 108, 520, 550);
+		panelTextViewer.setBounds(50, 108, 540, 550);
 		add(panelTextViewer);
 		panelTextViewer.setLayout(null);
 		
@@ -39,8 +41,8 @@ public class panelTextViewer2 extends JPanel {
 		textFileViewer.setEditable(false);
 		textFileViewer.setLineWrap(true);
 		textFileViewer.setWrapStyleWord(true);
-		textFileViewer.setBounds(8, 40, 504, 502);
-		panelTextViewer.add(textFileViewer);
+//		textFileViewer.setBounds(8, 40, 504, 502);
+//		panelTextViewer.add(textFileViewer);
 		
 		lblTituloText = new JLabel("");
 		lblTituloText.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -56,6 +58,13 @@ public class panelTextViewer2 extends JPanel {
 		txtSubtitulo.setBackground(new Color(242, 242, 242));
 		txtSubtitulo.setBounds(645, 150, 555, 100);
 		add(txtSubtitulo);
+		
+		JScrollPane scrollPane = new JScrollPane(textFileViewer);
+		scrollPane.setPreferredSize(new Dimension(504, 502));
+		scrollPane.setBounds(8, 40, 524, 502);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        panelTextViewer.add(scrollPane);
 		
 		
 		btnExplorador = new JButton("Abrir explorador");
