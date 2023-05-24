@@ -39,19 +39,4 @@ public class FileManager {
         o.close();
         f.close();
     }
-
-    public static String removeExtension(String fileName)
-    {/*
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex == -1)
-        {
-            throw new FileExtensionException();
-        }
-
-        StringBuilder name = new StringBuilder(fileName);
-        name.replace(dotIndex, fileName.length(), "");
-        return name.toString();
-        */
-        return fileName.substring(0, fileName.lastIndexOf('.'));
-    }
 }

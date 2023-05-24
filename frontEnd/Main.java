@@ -28,13 +28,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Huffman.CompressedFile;
-import backEnd.FileViewerBackEnd;
-import backEnd.FileExtensionException;
+import backEnd.BackEnd;
 import backEnd.FileManager;
 
 public class Main extends JFrame {
 
-	private JPanel contentPane;
+	private final JPanel contentPane;
 
 	/**
 	 * Launch the application.
@@ -71,7 +70,6 @@ public class Main extends JFrame {
 	panelTextViewer1 panel3 = new panelTextViewer1();
 	panelDescomprimir panel4 = new panelDescomprimir();
 	panelTextViewer2 panel5 = new panelTextViewer2();
-	panelHistorial panelH = new panelHistorial();
 		
 	public Main() {
 		setLocationByPlatform(true);
@@ -229,7 +227,7 @@ public class Main extends JFrame {
 				else {	
 					
 					try {
-						String textTofill = FileViewerBackEnd.readFile(fileSelected);
+						String textTofill = BackEnd.readFile(fileSelected);
 						panel3.textFileViewer.setText(textTofill);
 						panel3.lblTituloText.setText(fileSelectedName);
 						memorySelected = null;
@@ -260,7 +258,7 @@ public class Main extends JFrame {
 	                File selectedFile = fileChooser.getSelectedFile();
 	                
 	                fileSelected = selectedFile.getAbsolutePath();
-					fileSelectedName = FileManager.removeExtension(selectedFile.getName());
+					fileSelectedName = BackEnd.removeExtension(selectedFile.getName());
 					fileToCompress = new File(selectedFile.getAbsolutePath());
 
 					panel2.txtPath.setText(fileSelected);
@@ -284,8 +282,6 @@ public class Main extends JFrame {
 //	            	String selectedPath = fileChooser.getSelectedFile().getPath();
 	                File selectedFile = fileChooser.getSelectedFile();
 	                memorySelected = selectedFile.getAbsolutePath();
-//	                File file = new File(selectedFile.getAbsolutePath());
-//	                String fileName = file.getName();
 	                panel3.textMemorySelected.setText(memorySelected);
 	                //Se necesita guardar el nombre del file para el fichero
 	            } else {
@@ -303,7 +299,7 @@ public class Main extends JFrame {
 				}
 				else {
 					try {
-						CompressedFile filesito = FileViewerBackEnd.compressFile(fileToCompress);
+						CompressedFile filesito = BackEnd.compressFile(fileToCompress);
 						FileManager.writeCompressedFile(memorySelected, filesito, fileSelectedName);
 						JOptionPane.showMessageDialog(panel3, "Archivo guardado");
 						panel3.limpiar();
@@ -341,7 +337,7 @@ public class Main extends JFrame {
 					
 					try {
 //						String textTofill = FileViewerBackEnd.readFile(fileSelected2);
-						String textTofill = FileViewerBackEnd.decompressFile(fileSelected2);
+						String textTofill = BackEnd.decompressFile(fileSelected2);
 						auxText = textTofill;
 						panel5.textFileViewer.setText(textTofill);
 						panel5.lblTituloText.setText(fileSelectedName2);
@@ -373,7 +369,7 @@ public class Main extends JFrame {
 	                File selectedFile = fileChooser.getSelectedFile();
 	                
 	                fileSelected2 = selectedFile.getAbsolutePath();
-					fileSelectedName2 = FileManager.removeExtension(selectedFile.getName());
+					fileSelectedName2 = BackEnd.removeExtension(selectedFile.getName());
 					fileToCompress2 = new File(selectedFile.getAbsolutePath());
 
 					panel4.txtPath.setText(fileSelected2);
@@ -397,8 +393,6 @@ public class Main extends JFrame {
 //	            	String selectedPath = fileChooser.getSelectedFile().getPath();
 	                File selectedFile = fileChooser.getSelectedFile();
 	                memorySelected2 = selectedFile.getAbsolutePath();
-//	                File file = new File(selectedFile.getAbsolutePath());
-//	                String fileName = file.getName();
 	                panel5.textMemorySelected.setText(memorySelected2);
 	                //Se necesita guardar el nombre del file para el fichero
 	            } else {
@@ -449,10 +443,10 @@ public class Main extends JFrame {
                         for (File file : fileList) {
                             // Realiza las operaciones necesarias con cada archivo
                             // Por ejemplo, obtener datos o realizar acciones específicas
-                        	String extension = getFileExtension(file);
+                        	String extension = BackEnd.getFileExtension(file);
                             if (extension != null && extension.equalsIgnoreCase("txt")) {
                             	fileSelected = file.getAbsolutePath();
-            	                fileSelectedName = file.getName();
+            	                fileSelectedName = BackEnd.removeExtension(file.getName());
             	                fileToCompress = new File(file.getAbsolutePath());
             	                
             	                panel2.txtPath.setText(fileSelected);
@@ -490,10 +484,10 @@ public class Main extends JFrame {
                     for (File file : fileList) {
                         // Realiza las operaciones necesarias con cada archivo
                         // Por ejemplo, obtener datos o realizar acciones específicas
-                    	String extension = getFileExtension(file);
+                    	String extension = BackEnd.getFileExtension(file);
                         if (extension != null && extension.equalsIgnoreCase("txt")) {
                         	fileSelected = file.getAbsolutePath();
-        	                fileSelectedName = file.getName();
+        	                fileSelectedName = BackEnd.removeExtension(file.getName());
         	                fileToCompress = new File(file.getAbsolutePath());
         	                
         	                panel2.txtPath.setText(fileSelected);
@@ -524,10 +518,10 @@ public class Main extends JFrame {
                         for (File file : fileList) {
                             // Realiza las operaciones necesarias con cada archivo
                             // Por ejemplo, obtener datos o realizar acciones específicas
-                        	String extension = getFileExtension(file);
+                        	String extension = BackEnd.getFileExtension(file);
                             if (extension != null && extension.equalsIgnoreCase("comp")) {
                             	fileSelected2 = file.getAbsolutePath();
-            	                fileSelectedName2 = file.getName();
+            	                fileSelectedName2 = BackEnd.removeExtension(file.getName());
             	                fileToCompress2 = new File(file.getAbsolutePath());
             	                
             	                panel4.txtPath.setText(fileSelected2);
@@ -565,10 +559,10 @@ public class Main extends JFrame {
                     for (File file : fileList) {
                         // Realiza las operaciones necesarias con cada archivo
                         // Por ejemplo, obtener datos o realizar acciones específicas
-                    	String extension = getFileExtension(file);
+                    	String extension = BackEnd.getFileExtension(file);
                         if (extension != null && extension.equalsIgnoreCase("comp")) {
         	                fileSelected2 = file.getAbsolutePath();
-        	                fileSelectedName2 = file.getName();
+        	                fileSelectedName2 = BackEnd.removeExtension(file.getName());
         	                fileToCompress2 = new File(file.getAbsolutePath());
         	                
         	                panel4.txtPath.setText(fileSelected2);
@@ -634,15 +628,6 @@ public class Main extends JFrame {
 		anterior.setVisible(false);
 		contentPane.add(nuevo);
 	}
-	
-	private String getFileExtension(File file) {
-        String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
-            return fileName.substring(dotIndex + 1).toLowerCase();
-        }
-        return null;
-    }
 
 }
 
