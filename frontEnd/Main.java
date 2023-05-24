@@ -379,11 +379,7 @@ public class Main extends JFrame {
 					}
 					catch(IOException err) {
 						JOptionPane.showMessageDialog(panel4, err.getMessage());
-					}
-					catch(FileExtensionException err) {
-						JOptionPane.showMessageDialog(panel4, err.getMessage());
-					}
-					catch(ClassNotFoundException err) {
+					} catch(ClassNotFoundException err) {
 						JOptionPane.showMessageDialog(panel4, err.getMessage());
 					}
 				}

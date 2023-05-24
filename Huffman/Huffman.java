@@ -107,6 +107,7 @@ public class Huffman {
             actual.remove(actual.size() - 1);
             actual.add(true);
             bitsets = generateCode(node.getRightNode(), actual, bitsets);
+            actual.remove(actual.size() - 1);
         }
 
         return bitsets;
