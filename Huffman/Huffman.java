@@ -31,6 +31,20 @@ public class Huffman {
     }
 
     /**
+     * Given a compressed text, returns the uncompressed version of the text contained in it
+     * @param compressedFile - An CompressedFile object, that contains the desired text to decompress
+     * @return decompressed text, in form of a String, contained in the compressedFile
+     */
+    public static String decompressFile(CompressedFile compressedFile) {
+        Node treeHead = compressedFile.treeHead();
+        BitSet encoding = compressedFile.encoding();
+        int sizeOfTheCode = compressedFile.sizeOfTheCode();
+
+        // Decompress the bit sequence using the HuffmanTree
+        return decodeText(treeHead, encoding, sizeOfTheCode);
+    }
+
+    /**
      * Turns the text to bitset
      * @param treeHead - Head of the Huffman tree
      * @param file - .txt file that contains the text
@@ -111,20 +125,6 @@ public class Huffman {
         }
 
         return bitsets;
-    }
-
-    /**
-     * Given a compressed text, returns the uncompressed version of the text contained in it
-     * @param compressedFile - An CompressedFile object, that contains the desired text to decompress
-     * @return decompressed text, in form of a String, contained in the compressedFile
-     */
-    public static String decompressFile(CompressedFile compressedFile) {
-        Node treeHead = compressedFile.treeHead();
-        BitSet encoding = compressedFile.encoding();
-        int sizeOfTheCode = compressedFile.sizeOfTheCode();
-
-        // Decompress the bit sequence using the HuffmanTree
-        return decodeText(treeHead, encoding, sizeOfTheCode);
     }
 
     /**
