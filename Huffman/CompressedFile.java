@@ -14,5 +14,5 @@ import java.util.BitSet;
  *      more zeros in the BitSet that we need. So to counter this, we must store the exact number of bits we are using.
  * Santiago Yepes Mesa
  */
-public record CompressedFile(Node treeHead, BitSet encoding, int sizeOfTheCode) implements Serializable {
+public record CompressedFile(String[] baseNodes, BitSet encoding, int sizeOfTheCode) implements Serializable {
 }

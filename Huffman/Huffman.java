@@ -22,12 +22,14 @@ public class Huffman {
      */
     public static CompressedFile compressTxt(File file) throws IOException
     {
-        Node treeHead = createHuffmanTree(countCharacters(file));
+        HashMap<Character, Integer> characterCount = countCharacters(file);
+        Node treeHead = createHuffmanTree(characterCount);
         // Need this variable in order to save the amount of bits we are using
         ArrayList<Boolean> encodingBooleanVersion = getEncodedText(treeHead, file);
         BitSet encoding = arrayListToBitSet(encodingBooleanVersion);
+        String[] baseNodes = fromCharCountToBaseNodes(characterCount);
 
-        return new CompressedFile(treeHead, encoding, encodingBooleanVersion.size());
+        return new CompressedFile(baseNodes, encoding, encodingBooleanVersion.size());
     }
 
     /**
@@ -36,7 +38,7 @@ public class Huffman {
      * @return decompressed text, in form of a String, contained in the compressedFile
      */
     public static String decompressFile(CompressedFile compressedFile) {
-        Node treeHead = compressedFile.treeHead();
+        Node treeHead = createHuffmanTree(baseNodesToCharacterCount(compressedFile.baseNodes()));
         BitSet encoding = compressedFile.encoding();
         int sizeOfTheCode = compressedFile.sizeOfTheCode();
 
@@ -214,5 +216,34 @@ public class Huffman {
 
         // The last remaining element of the queue is the head of the created tree
         return list.poll();
+    }
+
+    private static HashMap<Character, Integer> baseNodesToCharacterCount(String[] baseNodes)
+    {
+        HashMap<Character, Integer> characterCount = new HashMap<>();
+        char c;
+        String integer;
+        for (String bNode : baseNodes)
+        {
+            c = bNode.charAt(0);
+            integer = bNode.substring(1);
+
+            characterCount.put(c, Integer.parseInt(integer));
+        }
+
+        return characterCount;
+    }
+
+    private static String[] fromCharCountToBaseNodes(HashMap<Character, Integer> characterCount)
+    {
+        String[] baseNodes = new String[characterCount.size()];
+        int i = 0;
+        for (Character c : characterCount.keySet())
+        {
+            baseNodes[i] = c.toString().concat(Integer.toString(characterCount.get(c)));
+            i++;
+        }
+
+        return baseNodes;
     }
 }
