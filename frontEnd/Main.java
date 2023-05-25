@@ -90,7 +90,7 @@ public class Main extends JFrame {
 		header.setBounds(0, 0, 1200, 80);
 		header.setLayout(null);
 		
-		JLabel titulo = new JLabel("Huffman");
+		JLabel titulo = new JLabel("Inicio");
 		titulo.setForeground(new Color(255, 255, 255));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		titulo.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -178,6 +178,8 @@ public class Main extends JFrame {
 				fileSelectedName = null;
 				memorySelected = null;
 				fileToCompress = null;
+				
+				titulo.setText("Comprimir");
 			}
 		});
 		
@@ -207,6 +209,8 @@ public class Main extends JFrame {
 				memorySelected2 = null;
 				fileToCompress2 = null;
 				auxText = null;
+				
+				titulo.setText("Descomprimir");
 			}
 		});
 		
@@ -215,6 +219,7 @@ public class Main extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				panelPrincipal(panel2);
 				panel2.limpiarCasillas();
+				titulo.setText("Inicio");
 			}
 		});
 		
@@ -233,6 +238,7 @@ public class Main extends JFrame {
 						memorySelected = null;
 						toTextViewer(panel2, panel3);
 						panel2.limpiarCasillas();
+						titulo.setText("File viewer");
 					}
 					catch(IOException err) {
 						JOptionPane.showMessageDialog(panel2, err.getMessage());
@@ -304,6 +310,7 @@ public class Main extends JFrame {
 						JOptionPane.showMessageDialog(panel3, "Archivo guardado");
 						panel3.limpiar();
 						toComprimir(panel3);
+						titulo.setText("Comprimir");
 					} catch (IOException err) {
 						JOptionPane.showMessageDialog(panel3, err.getMessage());
 					}
@@ -316,6 +323,7 @@ public class Main extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				panel3.limpiar();
 				toComprimir(panel3);
+				titulo.setText("Comprimir");
 			}
 		});
 		
@@ -324,6 +332,7 @@ public class Main extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				panelPrincipal(panel4);
 				panel4.limpiarCasillas();
+				titulo.setText("Inicio");
 			}
 		});
 		
@@ -344,6 +353,7 @@ public class Main extends JFrame {
 						memorySelected2 = null;
 						toTextViewer(panel4, panel5);
 						panel4.limpiarCasillas();
+						titulo.setText("File viewer");
 					}
 					catch(IOException | ClassNotFoundException err) {
 						JOptionPane.showMessageDialog(panel4, err.getMessage());
@@ -414,6 +424,7 @@ public class Main extends JFrame {
 						JOptionPane.showMessageDialog(panel5, "Archivo guardado");
 						panel5.limpiar();
 						toDescomprimir(panel5);
+						titulo.setText("Descomprimir");
 					} catch (IOException err) {
 						JOptionPane.showMessageDialog(panel5, err.getMessage());
 					}
@@ -426,6 +437,7 @@ public class Main extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				panel5.limpiar();
 				toDescomprimir(panel5);
+				titulo.setText("Descomprimir");
 			}
 		});
 		
