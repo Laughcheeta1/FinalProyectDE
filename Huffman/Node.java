@@ -1,14 +1,11 @@
 package Huffman;
 
-
-import java.io.Serializable;
-
 /**
  * Santiago Yepes Mesa.
  * Code highly based from the video: "Huffman Coding Algorithm Explained and Implemented in Java | Data Compression | Geekific" by Geekific
  */
 
-public class Node implements Comparable<Node>, Serializable {
+public class Node implements Comparable<Node> {
     private final int frequency; // Frequency that the node represents
     private final Node leftNode; // Left node child
     private final Node rightNode; // Right node child

@@ -22,15 +22,18 @@ public class Huffman {
      */
     public static CompressedFile compressTxt(File file) throws IOException
     {
-        HashMap<Character, Integer> characterCount = countCharacters(file);
-        Node treeHead = createHuffmanTree(characterCount);
+        HashMap<Character, Integer> characterCount = countCharacters(file); // Count the characters in the file
+        Node treeHead = createHuffmanTree(characterCount); // Get the HuffmanTree
         // Need this variable in order to save the amount of bits we are using
         ArrayList<Boolean> encodingBooleanVersion = getEncodedText(treeHead, file);
         BitSet encoding = arrayListToBitSet(encodingBooleanVersion);
+
+        //Get the string array representation of the base nodes
         String[] baseNodes = fromCharCountToBaseNodes(characterCount);
 
         return new CompressedFile(baseNodes, encoding, encodingBooleanVersion.size());
     }
+
 
     /**
      * Given a compressed text, returns the uncompressed version of the text contained in it
@@ -38,13 +41,44 @@ public class Huffman {
      * @return decompressed text, in form of a String, contained in the compressedFile
      */
     public static String decompressFile(CompressedFile compressedFile) {
-        Node treeHead = createHuffmanTree(baseNodesToCharacterCount(compressedFile.baseNodes()));
+        HashMap<Character, Integer> characterCount = baseNodesToCharacterCount(compressedFile.baseNodes());
+        Node treeHead = createHuffmanTree(characterCount);
         BitSet encoding = compressedFile.encoding();
         int sizeOfTheCode = compressedFile.sizeOfTheCode();
 
         // Decompress the bit sequence using the HuffmanTree
         return decodeText(treeHead, encoding, sizeOfTheCode);
     }
+
+
+    /**
+     * Given a file returns the count of the characters in form of a hashmap, where its key is the
+     * character, and the value is the frequency of the character.
+     * @param file - File to count the number of characters
+     * @return HashMap that contains the number of chars
+     */
+    private static HashMap<Character, Integer> countCharacters(File file) throws IOException
+    {
+        // Create the needed resources
+        HashMap<Character, Integer> count = new HashMap<>();
+        FileReader fr = new FileReader(file);
+        // Buffered reader is faster than file reader, that's why we use it
+        BufferedReader br = new BufferedReader(fr);
+
+        // Count the times each character appears, and save it into the HashMap
+        int character; // Is of type int because BufferedReader only allows to read the int value of the char
+        while ((character = br.read()) != -1)
+        {
+            if (count.containsKey((char) character)) // If char is contained, just add 1 to its frequency
+                count.replace((char) character, count.get((char) character) + 1);
+
+            else // If the char is not contained, add it
+                count.put((char) character, 1);
+        }
+
+        return count;
+    }
+
 
     /**
      * Turns the text to bitset
@@ -69,6 +103,50 @@ public class Huffman {
         return code;
     }
 
+
+    /**
+     * Recursive method that given a Huffman tree returns the boolean code of each character in the text
+     * @param head - head of the Huffman tree
+     * @return The encoded version of a given Character
+     */
+    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
+        HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
+        ArrayList<Boolean> actual = new ArrayList<>();
+
+        return generateCode(head, actual, bitsets);
+    }
+
+
+    /**
+     * Recursive method that generates the code for all the characters in the text, by traversing the tree in a
+     *  DFS manner, each left turn corresponds to a 0 and each right turn corresponds to a 1
+     * @param node - current node we are traversing in the huffman tree
+     * @param actual - code that has been generated up until now
+     * @param bitsets - the HashMap that stores the codes
+     * @return HashMap that has all the codes
+     */
+    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
+        if (node instanceof LeafNode) {
+            // If we get to a leaf node, we can stop generating the code, and assign the char contained in the leaf
+            // node, its code.
+            ArrayList<Boolean> codeOfTheNode = new ArrayList<>(actual);
+            bitsets.put(((LeafNode) node).getValue(), codeOfTheNode);
+        }
+        else
+        {
+            // Keep going down the tree generating codes
+            actual.add(false);
+            bitsets = generateCode(node.getLeftNode(),actual, bitsets);
+            actual.remove(actual.size() - 1);
+            actual.add(true);
+            bitsets = generateCode(node.getRightNode(), actual, bitsets);
+            actual.remove(actual.size() - 1);
+        }
+
+        return bitsets;
+    }
+
+
     /**
      * Given a boolean ArrayList, return the bitset version of the ArrayList
      * @param code - Arraylist to convert
@@ -88,46 +166,6 @@ public class Huffman {
         return bitset;
     }
 
-    /**
-     * Recursive method that given a Huffman tree returns the boolean code of each character in the text
-     * @param head - head of the Huffman tree
-     * @return The encoded version of a given Character
-     */
-    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node head){
-        HashMap<Character, ArrayList<Boolean>> bitsets = new HashMap<>();
-        ArrayList<Boolean> actual = new ArrayList<>();
-
-        return generateCode(head, actual, bitsets);
-    }
-
-    /**
-     * Recursive method that generates the code for all the characters in the text, by traversing the tree in a
-     *  DFS manner, each left turn corresponds to a 0 and each right turn corresponds to a 1
-     * @param node - current node we are traversing in the huffman tree
-     * @param actual - code that has been generated up until now
-     * @param bitsets - the HashMap that stores the codes
-     * @return HashMap that has all the codes
-     */
-    private static HashMap<Character, ArrayList<Boolean>> generateCode(Node node, ArrayList<Boolean> actual, HashMap<Character, ArrayList<Boolean>> bitsets){
-        if (node instanceof LeafNode) {
-            // If we get to a leaf node, we can stop generating the code, and assign the char contained in the leaf
-                // node, its code.
-            ArrayList<Boolean> codeOfTheNode = new ArrayList<>(actual);
-            bitsets.put(((LeafNode) node).getValue(), codeOfTheNode);
-        }
-        else
-        {
-            // Keep going down the tree generating codes
-            actual.add(false);
-            bitsets = generateCode(node.getLeftNode(),actual, bitsets);
-            actual.remove(actual.size() - 1);
-            actual.add(true);
-            bitsets = generateCode(node.getRightNode(), actual, bitsets);
-            actual.remove(actual.size() - 1);
-        }
-
-        return bitsets;
-    }
 
     /**
      * Decodes the bits sequence using the Huffman tree, and returns the decompressed text
@@ -161,34 +199,26 @@ public class Huffman {
     }
 
 
-
-
     /**
-     * Given a file returns the count of the characters in form of a hashmap, where its key is the
-     * character, and the value is the frequency of the character.
-     * @param file - File to count the number of characters
-     * @return HashMap that contains the number of chars
+     * Converts a HashMap with key value pairs <Character, Integer> to an array of Strings, where each string saves
+     * the key value pair by having the char as the first index of the string, then the rest of the string is the
+     * frequency of the character. Example: given the pair (a, 13), it's string would be "a13".
+     * @param characterCount - HashMap containing as a key a character, and its value, the frequency of the character
+     * @return an array of String representing the HashMap in the way specified above.
      */
-    private static HashMap<Character, Integer> countCharacters(File file) throws IOException
+    private static String[] fromCharCountToBaseNodes(HashMap<Character, Integer> characterCount)
     {
-        // Create the needed resources
-        HashMap<Character, Integer> count = new HashMap<>();
-        FileReader fr = new FileReader(file);
-        // Buffered reader is faster than file reader, that's why we use it
-        BufferedReader br = new BufferedReader(fr);
+        String[] baseNodes = new String[characterCount.size()];
 
-        // Count the times each character appears, and save it into the HashMap
-        int character; // Is of type int because BufferedReader only allows to read the int value of the char
-        while ((character = br.read()) != -1)
+        int i = 0;
+        for (Character c : characterCount.keySet())
         {
-            if (count.containsKey((char) character)) // If char is contained, just add 1 to its frequency
-                count.replace((char) character, count.get((char) character) + 1);
-
-            else // If the char is not contained, add it
-                count.put((char) character, 1);
+            // Add the value pair to the array
+            baseNodes[i] = c.toString().concat(Integer.toString(characterCount.get(c)));
+            i++;
         }
 
-        return count;
+        return baseNodes;
     }
 
 
@@ -218,32 +248,30 @@ public class Huffman {
         return list.poll();
     }
 
+
+    /**
+     * From a string array that represents a HashMap<Character, Integer> returns the HashMap.
+     * Every string in the array is a key value pair; the first index of the String is the character, and the rest is
+     * the int.
+     * @param baseNodes - String representing the HashMap
+     * @return HashMap that was being represented
+     */
     private static HashMap<Character, Integer> baseNodesToCharacterCount(String[] baseNodes)
     {
         HashMap<Character, Integer> characterCount = new HashMap<>();
+
         char c;
         String integer;
         for (String bNode : baseNodes)
         {
+            // Get the info from the string
             c = bNode.charAt(0);
             integer = bNode.substring(1);
 
+            // Add the key value pair to the HashMap
             characterCount.put(c, Integer.parseInt(integer));
         }
 
         return characterCount;
-    }
-
-    private static String[] fromCharCountToBaseNodes(HashMap<Character, Integer> characterCount)
-    {
-        String[] baseNodes = new String[characterCount.size()];
-        int i = 0;
-        for (Character c : characterCount.keySet())
-        {
-            baseNodes[i] = c.toString().concat(Integer.toString(characterCount.get(c)));
-            i++;
-        }
-
-        return baseNodes;
     }
 }
