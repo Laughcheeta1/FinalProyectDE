@@ -32,16 +32,7 @@ public class BackEnd {
         }
         return null;
     }
-
-    /**
-     * checks if a file exists for the given path
-     * @param path of the file
-     * @return if the file exists or not
-     */
-    public static boolean checkPath(String path) {
-        File file = new File(path);
-        return file.exists();
-    }
+    
 
     /**
      * Given the location of a file, returns the contents of the file as a String
