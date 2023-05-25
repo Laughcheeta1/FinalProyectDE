@@ -1,13 +1,11 @@
 package Huffman;
 
-import java.io.Serializable;
-
 /**
  * Santiago Yepes Mesa.
  * Code highly based from the video: "Huffman Coding Algorithm Explained and Implemented in Java | Data Compression | Geekific" by Geekific
  */
 
-public class LeafNode extends Node implements Serializable {
+public class LeafNode extends Node {
     private final char value; // Char stored by the leaf node
 
     /**
